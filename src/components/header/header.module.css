@@ -1,0 +1,199 @@
+.header {
+   position: fixed;          /* ✅ key */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;     
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* ✅ key */
+  font-family: system-ui, Arial, sans-serif;
+  background: #2d2c35;
+  border-bottom: none;
+}
+
+.logo { width:95px; }
+
+/* Mobile hamburger */
+.iconButton {
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #fff;
+}
+.iconButton:focus,
+.iconButton:focus-visible { outline: none; }
+.iconButton:active { transform: scale(0.98); }
+
+/* Mobile dropdown */
+.menuPanel {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 16px;
+  width: 210px;
+  padding: 8px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+  z-index: 50;
+}
+.menuItem {
+  display: block;
+  padding: 12px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: #111;
+  font-size: 15px;
+}
+.menuItem:hover { background: rgba(0, 0, 0, 0.04); }
+
+/* Desktop right side group */
+.rightGroup {
+  display: none;           /* hidden on mobile */
+  align-items: center;
+  justify-content: flex-end; /* ✅ keeps links/button tight to the right */
+  gap: 22px;
+  flex: 1;                 /* ✅ gives it space to align right */
+  margin-left: 20px; 
+}
+
+/* Desktop nav links */
+.desktopNav {
+  display: flex;
+  align-items: center;
+  gap: 42px;
+}
+
+.desktopNav a {
+  display: inline-flex;        /* 🔥 important */
+  align-items: center;         /* vertical centering */
+  height: 100%;                /* align with button */
+  line-height: 1;              /* remove baseline offset */
+
+  position: relative;
+  color: #fff;
+  text-decoration: none;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding-bottom: 6px;
+}
+.desktopNav a:visited { color: #fff; }
+
+.desktopNav a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 0;
+  height: 2px;
+  background: #fbd160;
+  transform: translateX(-50%);
+  transition: width 0.25s ease;
+}
+.desktopNav a:hover::after { width: 100%; }
+
+.contactButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center; /* stays centered */
+  height: 18px; 
+  background: linear-gradient(
+    135deg,
+    #fbd160 0%,
+    #f8ae02 45%,
+    #8f5f0c 100%
+  );
+  color: #2d2c35;
+  text-decoration: none;
+  margin: 0;
+  border-radius: 5px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+
+  /* starting size */
+  padding: 10px 18px;
+  min-width: 120px;
+
+  transition:
+    padding 720ms cubic-bezier(.16, 1, .3, 1),
+    box-shadow 260ms ease;
+}
+
+.btnText {
+  display: inline-block;
+  transition: transform 720ms cubic-bezier(.16, 1, .3, 1);
+  will-change: transform;
+}
+
+/* expand to the left (because rightGroup is right-aligned) */
+.contactButton:hover {
+  padding: 10px 52px 10px 12px; /* tighter left, bigger right */
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+/* smoothly slide text toward the left edge */
+.contactButton:hover .btnText {
+  transform: translateX(-18px); /* tweak: -6px to -14px */
+}
+
+.contactButton:active {
+  transform: scale(0.98);
+}
+
+.contactButton,
+.contactButton:visited,
+.contactButton:hover,
+.contactButton:active,
+.contactButton:focus {
+  color: #2d2c35;
+}
+
+.mobileRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-direction: row-reverse;
+}
+
+
+
+/* Desktop switch */
+@media (min-width: 1200px) {
+  .iconButton { display: none; }
+  .rightGroup { display: flex; }
+  .mobileRight { display: none; } /* ✅ hide on desktop */
+  .logo { width:115px; }
+    .header {
+    padding: 20px 40px; /* wider desktop breathing room */
+  }
+}
+
+@media (max-width: 1199px) {
+  .contactButton {
+    /* reduce left/right spacing */
+    margin-left: 8px;
+    margin-right: 1px;
+    font-size: 0.8rem;
+    letter-spacing: .1rem;
+
+    /* tighter horizontal padding */
+    padding: 8px 12px;
+    min-width: 96px;
+  }
+
+  .contactButton:hover {
+    padding: 8px 28px 8px 10px; /* still expands left, just less */
+  }
+
+  .contactButton:hover .btnText {
+    transform: translateX(-10px);
+  }
+}

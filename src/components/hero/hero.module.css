@@ -155,7 +155,7 @@
 .machineWrap img {
   position: relative;
   z-index: 1;
-  width: min(180px, 85vw);
+  width: min(160px, 55vw);
   height: auto;
   display: block;
   animation: machinePulse 4.5s ease-in-out infinite;

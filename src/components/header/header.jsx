@@ -6,8 +6,6 @@ import { AnimatePresence, motion } from "framer-motion";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
-
-  // ✅ Close mobile menu when switching to desktop
   useEffect(() => {
     const onResize = () => {
       if (window.innerWidth >= 1200) {
@@ -22,7 +20,6 @@ export default function Header() {
     <header className={styles.header}>
       <img src={Logo} alt="Brooklyn Snack Mate Logo" className={styles.logo} />
 
-      {/* ✅ Desktop navigation */}
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
           <a href="tel:+11234567890">Call</a>

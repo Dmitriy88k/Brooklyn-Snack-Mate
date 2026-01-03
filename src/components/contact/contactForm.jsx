@@ -8,11 +8,34 @@ export default function ContactForm() {
     e.preventDefault();
     setStatus("sending");
 
-    // For now this is UI-only.
-    // Next step: we’ll connect this to Formspree or your backend endpoint.
-    await new Promise((r) => setTimeout(r, 600));
-    setStatus("sent");
-    e.currentTarget.reset();
+    try {
+      const form = e.currentTarget;
+      const data = new FormData(form);
+
+      // Optional but recommended metadata
+      data.append(
+        "_subject",
+        "New Vending Placement Inquiry (Brooklyn SnackMate)"
+      );
+      data.append("_format", "plain"); // keeps the email readable
+
+      const res = await fetch("https://formspree.io/f/xaqndryw", {
+        method: "POST",
+        body: data,
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (res.ok) {
+        setStatus("sent");
+        form.reset();
+      } else {
+        setStatus("error");
+      }
+    } catch (err) {
+      setStatus("error");
+    }
   }
 
   return (
@@ -22,7 +45,8 @@ export default function ContactForm() {
           <p className={styles.kicker}>Brooklyn SnackMate</p>
           <h1 className={styles.title}>Contact</h1>
           <p className={styles.subtitle}>
-            Tell us your location details and we’ll respond quickly about vending placement.
+            Tell us your location details and we’ll respond quickly about
+            vending placement.
           </p>
         </header>
 
@@ -43,9 +67,13 @@ export default function ContactForm() {
               <a className={styles.quickLink} href="tel:+19297776229">
                 Call: +1 (929) 777-6229
               </a>
-              <a className={styles.quickLink} href="mailto:brooklynsnackmate@gmail.com">
+              <a
+                className={styles.quickLink}
+                href="mailto:info@brooklynsnackmate.com"
+              >
                 Email: info@brooklynsnackmate.com
               </a>
+
               <p className={styles.note}>
                 No spam. We only use your info to respond to this request.
               </p>
@@ -94,7 +122,12 @@ export default function ContactForm() {
 
                 <label className={styles.label}>
                   Location type
-                  <select className={styles.input} name="locationType" required defaultValue="">
+                  <select
+                    className={styles.input}
+                    name="locationType"
+                    required
+                    defaultValue=""
+                  >
                     <option value="" disabled>
                       Select one
                     </option>

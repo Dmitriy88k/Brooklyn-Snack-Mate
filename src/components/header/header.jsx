@@ -25,6 +25,7 @@ export default function Header() {
           <a href="tel:+11234567890">Call</a>
           <a href="#survey">Survey</a>
           <a href="#contact">Contact</a>
+          <a href="#test">Test</a>
         </nav>
 
         <a href="#contact" className={styles.contactButton}>

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import styles from "./contactForm.module.css";
 
 export default function ContactForm() {
-  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [status, setStatus] = useState("idle"); // "idle" | "sending" | "sent" | "error"
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -41,29 +41,33 @@ export default function ContactForm() {
   return (
     <main className={styles.page}>
       <section className={styles.shell}>
-        {/* TITLE: comes from top */}
+        {/* TITLE: smooth drop from top */}
         <motion.header
           className={styles.header}
-          initial={{ y: -50, opacity: 0 }}
+          initial={{ y: -36, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{
-            duration: 1.1,
-            ease: [0.16, 1, 0.3, 1],
+            type: "spring",
+            stiffness: 65,
+            damping: 18,
+            mass: 1,
           }}
         >
           <h1 className={styles.title}>Contact Us</h1>
         </motion.header>
 
         <div className={styles.grid}>
-          {/* LEFT: info card (from left) */}
+          {/* LEFT: info card from left */}
           <motion.aside
             className={styles.infoCard}
-            initial={{ x: -60, opacity: 0 }}
+            initial={{ x: -32, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{
-              duration: 1.25,
-              delay: 0.25,
-              ease: [0.16, 1, 0.3, 1],
+              type: "spring",
+              stiffness: 60,
+              damping: 18,
+              mass: 1,
+              delay: 0.18,
             }}
           >
             <h2 className={styles.cardTitle}>What to include</h2>
@@ -77,20 +81,18 @@ export default function ContactForm() {
             <div className={styles.divider} />
 
             <div className={styles.quick}>
-            <a
-  className={`${styles.quickLink} ${styles.phoneLink}`}
-  href="tel:+19297776229"
->
-  Call: +1 (929) 777-6229
-</a>
-
-<a
-  className={`${styles.quickLink} ${styles.emailLink}`}
-  href="mailto:info@brooklynsnackmate.com"
->
-  Email: info@brooklynsnackmate.com
-</a>
-
+              <a
+                className={`${styles.quickLink} ${styles.phoneLink}`}
+                href="tel:+19297776229"
+              >
+                Call: +1 (929) 777-6229
+              </a>
+              <a
+                className={`${styles.quickLink} ${styles.emailLink}`}
+                href="mailto:info@brooklynsnackmate.com"
+              >
+                Email: info@brooklynsnackmate.com
+              </a>
 
               <p className={styles.note}>
                 No spam. We only use your info to respond to this request.
@@ -98,15 +100,17 @@ export default function ContactForm() {
             </div>
           </motion.aside>
 
-          {/* RIGHT: form card (from right) */}
+          {/* RIGHT: form card from right */}
           <motion.section
             className={styles.formCard}
-            initial={{ x: 60, opacity: 0 }}
+            initial={{ x: 32, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{
-              duration: 1.25,
-              delay: 0.38,
-              ease: [0.16, 1, 0.3, 1],
+              type: "spring",
+              stiffness: 60,
+              damping: 18,
+              mass: 1,
+              delay: 0.26,
             }}
           >
             <form className={styles.form} onSubmit={onSubmit}>

@@ -19,6 +19,13 @@
   padding: 22px 10px 26px;
 }
 
+.header,
+.infoCard,
+.formCard {
+  will-change: transform, opacity;
+  transform: translateZ(0);
+}
+
 .title {
   margin: 0;
   color: #fbd160;

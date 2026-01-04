@@ -18,7 +18,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${open ? styles.headerOpen : ""}`}>
       <Link to="/" className={styles.logoLink} onClick={() => setOpen(false)}>
         <img
           src={Logo}
@@ -30,10 +30,11 @@ export default function Header() {
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
 
-          <Link to="/survey">Survey</Link>
+          <Link >Machines</Link>
           <Link >Catalog</Link>
           <Link >FAQs</Link>
           <Link >About</Link>
+          <Link to="/survey">Survey</Link>
         </nav>
 
         <Link to="/contact" className={styles.contactButton}>
@@ -89,17 +90,21 @@ export default function Header() {
           {open && (
             <motion.div
               className={styles.menuPanel}
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: -40 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{
+                type: "tween",
+                duration: 0.28,
+                ease: "easeInOut",
+              }}
             >
               <Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
-                Survey
+                Machines
               </Link>
 
               <Link 
@@ -124,6 +129,14 @@ export default function Header() {
                 onClick={() => setOpen(false)}
               >
                 About
+              </Link>
+
+              <Link
+                className={styles.menuItem}
+                to="/contact"
+                onClick={() => setOpen(false)}
+              >
+                Survey
               </Link>
             </motion.div>
           )}

@@ -81,6 +81,7 @@
   font-size: 3.5rem;
   animation: neonPulse 4.5s ease-in-out infinite;
   font-family: "Playfair Display", serif;
+  will-change: text-shadow;
 }
 
 .title,

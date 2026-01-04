@@ -42,12 +42,7 @@ export default function ContactForm() {
     <main className={styles.page}>
       <section className={styles.shell}>
         <header className={styles.header}>
-          <p className={styles.kicker}>Brooklyn SnackMate</p>
-          <h1 className={styles.title}>Contact</h1>
-          <p className={styles.subtitle}>
-            Tell us your location details and we’ll respond quickly about
-            vending placement.
-          </p>
+          <h1 className={styles.title}>Contact Us</h1>
         </header>
 
         <div className={styles.grid}>
@@ -85,7 +80,7 @@ export default function ContactForm() {
             <form className={styles.form} onSubmit={onSubmit}>
               <div className={styles.row}>
                 <label className={styles.label}>
-                  Full name
+                  Name
                   <input
                     className={styles.input}
                     name="name"
@@ -101,7 +96,7 @@ export default function ContactForm() {
                     className={styles.input}
                     name="phone"
                     autoComplete="tel"
-                    placeholder="(929) 000-0000"
+                    placeholder="(718) 888-8888"
                     required
                   />
                 </label>
@@ -147,7 +142,8 @@ export default function ContactForm() {
                   className={styles.input}
                   name="address"
                   autoComplete="street-address"
-                  placeholder="Street, City, State"
+                  placeholder="Street, City, State, Zip.
+                  "
                 />
               </label>
 
@@ -156,7 +152,7 @@ export default function ContactForm() {
                 <textarea
                   className={styles.textarea}
                   name="message"
-                  placeholder="Tell us what you need (snacks + drinks combo machine, number of employees/guests, etc.)"
+                  placeholder="We’d love to learn more about your location — please share a few details such as the type of machine you’re interested in and the number of employees or guests."
                   rows={6}
                   required
                 />

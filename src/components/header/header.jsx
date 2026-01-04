@@ -19,20 +19,25 @@ export default function Header() {
 
   return (
     <header className={styles.header}>
-      <img src={Logo} alt="Brooklyn Snack Mate Logo" className={styles.logo} />
+      <Link to="/" className={styles.logoLink} onClick={() => setOpen(false)}>
+        <img
+          src={Logo}
+          alt="Brooklyn Snack Mate Logo"
+          className={styles.logo}
+        />
+      </Link>
 
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
-          <a href="tel:+11234567890">Call</a>
-          <Link to="/">Home</Link>
-
-          <Link to="/contact">Contact</Link>
 
           <Link to="/survey">Survey</Link>
+          <Link >Catalog</Link>
+          <Link >FAQs</Link>
+          <Link >About</Link>
         </nav>
 
         <Link to="/contact" className={styles.contactButton}>
-          <span className={styles.btnText}>CONTACT</span>
+          <span className={styles.btnText}>Contact Us</span>
         </Link>
       </div>
 
@@ -43,7 +48,9 @@ export default function Header() {
           className={styles.contactButton}
           onClick={() => setOpen(false)}
         >
-          <span className={styles.btnText}>CONTACT</span>
+          <span className={styles.btnText}>Contact Us
+
+          </span>
         </Link>
 
         <button
@@ -87,22 +94,37 @@ export default function Header() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18 }}
             >
+              <Link 
+                className={styles.menuItem} 
+                to="/"
+                onClick={() => setOpen(false)}
+              >
+                Survey
+              </Link>
+
+              <Link 
+                className={styles.menuItem} 
+                to="/"
+                onClick={() => setOpen(false)}
+              >
+                Catalog
+              </Link>
+              
               <Link
                 className={styles.menuItem}
                 to="/contact"
                 onClick={() => setOpen(false)}
               >
-                Contact
+                FAQs
               </Link>
-              <a className={styles.menuItem} href="tel:+11234567890">
-                Call
-              </a>
-              <a className={styles.menuItem} href="#contact">
-                Contact
-              </a>
-              <a className={styles.menuItem} href="#survey">
-                Survey
-              </a>
+              
+              <Link
+                className={styles.menuItem}
+                to="/contact"
+                onClick={() => setOpen(false)}
+              >
+                About
+              </Link>
             </motion.div>
           )}
         </AnimatePresence>

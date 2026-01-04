@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import styles from "./contactForm.module.css";
 
 export default function ContactForm() {
@@ -12,12 +13,11 @@ export default function ContactForm() {
       const form = e.currentTarget;
       const data = new FormData(form);
 
-      // Optional but recommended metadata
       data.append(
         "_subject",
         "New Vending Placement Inquiry (Brooklyn SnackMate)"
       );
-      data.append("_format", "plain"); // keeps the email readable
+      data.append("_format", "plain");
 
       const res = await fetch("https://formspree.io/f/xaqndryw", {
         method: "POST",
@@ -41,18 +41,31 @@ export default function ContactForm() {
   return (
     <main className={styles.page}>
       <section className={styles.shell}>
-        <header className={styles.header}>
-          <p className={styles.kicker}>Brooklyn SnackMate</p>
-          <h1 className={styles.title}>Contact</h1>
-          <p className={styles.subtitle}>
-            Tell us your location details and we’ll respond quickly about
-            vending placement.
-          </p>
-        </header>
+        {/* TITLE: comes from top */}
+        <motion.header
+          className={styles.header}
+          initial={{ y: -50, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{
+            duration: 1.1,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          <h1 className={styles.title}>Contact Us</h1>
+        </motion.header>
 
         <div className={styles.grid}>
-          {/* LEFT: info card */}
-          <aside className={styles.infoCard}>
+          {/* LEFT: info card (from left) */}
+          <motion.aside
+            className={styles.infoCard}
+            initial={{ x: -60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{
+              duration: 1.25,
+              delay: 0.25,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
             <h2 className={styles.cardTitle}>What to include</h2>
             <ul className={styles.list}>
               <li>Business name & address</li>
@@ -64,28 +77,42 @@ export default function ContactForm() {
             <div className={styles.divider} />
 
             <div className={styles.quick}>
-              <a className={styles.quickLink} href="tel:+19297776229">
-                Call: +1 (929) 777-6229
-              </a>
-              <a
-                className={styles.quickLink}
-                href="mailto:info@brooklynsnackmate.com"
-              >
-                Email: info@brooklynsnackmate.com
-              </a>
+            <a
+  className={`${styles.quickLink} ${styles.phoneLink}`}
+  href="tel:+19297776229"
+>
+  Call: +1 (929) 777-6229
+</a>
+
+<a
+  className={`${styles.quickLink} ${styles.emailLink}`}
+  href="mailto:info@brooklynsnackmate.com"
+>
+  Email: info@brooklynsnackmate.com
+</a>
+
 
               <p className={styles.note}>
                 No spam. We only use your info to respond to this request.
               </p>
             </div>
-          </aside>
+          </motion.aside>
 
-          {/* RIGHT: form card */}
-          <section className={styles.formCard}>
+          {/* RIGHT: form card (from right) */}
+          <motion.section
+            className={styles.formCard}
+            initial={{ x: 60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{
+              duration: 1.25,
+              delay: 0.38,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
             <form className={styles.form} onSubmit={onSubmit}>
               <div className={styles.row}>
                 <label className={styles.label}>
-                  Full name
+                  Name
                   <input
                     className={styles.input}
                     name="name"
@@ -101,7 +128,7 @@ export default function ContactForm() {
                     className={styles.input}
                     name="phone"
                     autoComplete="tel"
-                    placeholder="(929) 000-0000"
+                    placeholder="(718) 888-8888"
                     required
                   />
                 </label>
@@ -147,7 +174,7 @@ export default function ContactForm() {
                   className={styles.input}
                   name="address"
                   autoComplete="street-address"
-                  placeholder="Street, City, State"
+                  placeholder="Street, City, State, Zip."
                 />
               </label>
 
@@ -156,7 +183,7 @@ export default function ContactForm() {
                 <textarea
                   className={styles.textarea}
                   name="message"
-                  placeholder="Tell us what you need (snacks + drinks combo machine, number of employees/guests, etc.)"
+                  placeholder="We’d love to learn more about your location — please share a few details such as the type of machine you’re interested in and the number of employees or guests."
                   rows={6}
                   required
                 />
@@ -182,7 +209,7 @@ export default function ContactForm() {
                 </p>
               )}
             </form>
-          </section>
+          </motion.section>
         </div>
       </section>
     </main>

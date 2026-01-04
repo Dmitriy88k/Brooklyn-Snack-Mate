@@ -60,8 +60,9 @@ export default function ContactForm() {
           {/* LEFT: info card from left */}
           <motion.aside
             className={styles.infoCard}
-            initial={{ x: -32, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
+            initial={{ y: 16, opacity: 0 }}
+animate={{ y: 0, opacity: 1 }}
+
             transition={{
               type: "spring",
               stiffness: 60,
@@ -103,8 +104,9 @@ export default function ContactForm() {
           {/* RIGHT: form card from right */}
           <motion.section
             className={styles.formCard}
-            initial={{ x: 32, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
+            initial={{ y: 16, opacity: 0 }}
+animate={{ y: 0, opacity: 1 }}
+
             transition={{
               type: "spring",
               stiffness: 60,

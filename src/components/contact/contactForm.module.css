@@ -115,6 +115,20 @@
   text-decoration: underline;
 }
 
+/* ========== MOBILE DEFAULT (no underline, no purple) ========== */
+.quickLink,
+.quickLink:link,
+.quickLink:visited,
+.quickLink:hover,
+.quickLink:active,
+.quickLink:focus {
+  color: #fbd160 !important;
+  text-decoration: none !important;
+}
+
+
+
+
 .note {
   margin: 4px 0 0;
   color: rgba(255, 255, 255, 0.72);
@@ -222,7 +236,7 @@
 }
 
 /* Desktop layout */
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
   .grid {
     grid-template-columns: 0.92fr 1.08fr;
     gap: 18px;
@@ -237,7 +251,32 @@
   .formCard {
     padding: 22px;
   }
+
+  /* DESKTOP: phone link stays plain, no underline, no hover effect */
+.phoneLink {
+  text-decoration: none !important;
+  color: #fbd160 !important;
 }
+.phoneLink:hover {
+  text-decoration: none !important;
+  color: #fbd160 !important;
+}
+
+/* DESKTOP: email link gets underline ONLY on hover */
+.emailLink {
+  text-decoration: none !important;
+  color: #fbd160 !important;
+}
+
+.emailLink:hover {
+  text-decoration: underline !important;
+  color: #fbd160 !important;
+}
+
+}
+
+
+
 
 @keyframes neonPulse {
   0%,

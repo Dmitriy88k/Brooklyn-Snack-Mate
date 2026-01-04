@@ -77,15 +77,20 @@ export default function ContactForm() {
             <div className={styles.divider} />
 
             <div className={styles.quick}>
-              <a className={styles.quickLink} href="tel:+19297776229">
-                Call: +1 (929) 777-6229
-              </a>
-              <a
-                className={styles.quickLink}
-                href="mailto:info@brooklynsnackmate.com"
-              >
-                Email: info@brooklynsnackmate.com
-              </a>
+            <a
+  className={`${styles.quickLink} ${styles.phoneLink}`}
+  href="tel:+19297776229"
+>
+  Call: +1 (929) 777-6229
+</a>
+
+<a
+  className={`${styles.quickLink} ${styles.emailLink}`}
+  href="mailto:info@brooklynsnackmate.com"
+>
+  Email: info@brooklynsnackmate.com
+</a>
+
 
               <p className={styles.note}>
                 No spam. We only use your info to respond to this request.

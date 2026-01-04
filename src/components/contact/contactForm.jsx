@@ -1,9 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import styles from "./contactForm.module.css";
 
 export default function ContactForm() {
   const [status, setStatus] = useState("idle"); // "idle" | "sending" | "sent" | "error"
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  // Detect desktop vs mobile (matches your 1200px breakpoint)
+  useEffect(() => {
+    const check = () => {
+      if (typeof window !== "undefined") {
+        setIsDesktop(window.innerWidth >= 1200);
+      }
+    };
+
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -38,10 +52,21 @@ export default function ContactForm() {
     }
   }
 
+  // Animation configs
+  const infoInitial = isDesktop
+    ? { x: -32, opacity: 0 }
+    : { y: 24, opacity: 0 };
+
+  const formInitial = isDesktop
+    ? { x: 32, opacity: 0 }
+    : { y: 24, opacity: 0 };
+
+  const commonAnimate = { x: 0, y: 0, opacity: 1 };
+
   return (
     <main className={styles.page}>
       <section className={styles.shell}>
-        {/* TITLE: smooth drop from top */}
+        {/* TITLE: smooth drop from top on all devices */}
         <motion.header
           className={styles.header}
           initial={{ y: -36, opacity: 0 }}
@@ -57,12 +82,11 @@ export default function ContactForm() {
         </motion.header>
 
         <div className={styles.grid}>
-          {/* LEFT: info card from left */}
+          {/* LEFT: info card */}
           <motion.aside
             className={styles.infoCard}
-            initial={{ y: 16, opacity: 0 }}
-animate={{ y: 0, opacity: 1 }}
-
+            initial={infoInitial}
+            animate={commonAnimate}
             transition={{
               type: "spring",
               stiffness: 60,
@@ -101,12 +125,11 @@ animate={{ y: 0, opacity: 1 }}
             </div>
           </motion.aside>
 
-          {/* RIGHT: form card from right */}
+          {/* RIGHT: form card */}
           <motion.section
             className={styles.formCard}
-            initial={{ y: 16, opacity: 0 }}
-animate={{ y: 0, opacity: 1 }}
-
+            initial={formInitial}
+            animate={commonAnimate}
             transition={{
               type: "spring",
               stiffness: 60,

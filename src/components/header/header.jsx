@@ -18,7 +18,7 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={styles.header}>
+    <header className={`${styles.header} ${open ? styles.headerOpen : ""}`}>
       <Link to="/" className={styles.logoLink} onClick={() => setOpen(false)}>
         <img
           src={Logo}
@@ -89,10 +89,14 @@ export default function Header() {
           {open && (
             <motion.div
               className={styles.menuPanel}
-              initial={{ opacity: 0, y: -8 }}
+              initial={{ opacity: 0, y: -40 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -8 }}
-              transition={{ duration: 0.18 }}
+              exit={{ opacity: 0, y: -40 }}
+              transition={{
+                type: "tween",
+                duration: 0.28,
+                ease: "easeInOut",
+              }}
             >
               {/* <Link 
                 className={styles.menuItem} 
@@ -123,7 +127,7 @@ export default function Header() {
                 to="/about"
                 onClick={() => setOpen(false)}
               >
-                About
+                Survey
               </Link>
             </motion.div>
           )}

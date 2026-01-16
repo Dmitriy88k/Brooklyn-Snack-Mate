@@ -30,10 +30,10 @@ export default function Header() {
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
 
-          <Link to="/survey">Survey</Link>
-          <Link >Catalog</Link>
-          <Link >FAQs</Link>
-          <Link >About</Link>
+          {/* <Link to="/survey">Survey</Link> */}
+          {/* <Link >Catalog</Link> */}
+          {/* <Link >FAQs</Link> */}
+          <Link to="/about" >About</Link>
         </nav>
 
         <Link to="/contact" className={styles.contactButton}>
@@ -94,33 +94,33 @@ export default function Header() {
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.18 }}
             >
-              <Link 
+              {/* <Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
                 Survey
-              </Link>
+              </Link> */}
 
-              <Link 
+              {/* <Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
                 Catalog
-              </Link>
+              </Link> */}
               
-              <Link
+              {/* <Link
                 className={styles.menuItem}
                 to="/contact"
                 onClick={() => setOpen(false)}
               >
                 FAQs
-              </Link>
+              </Link> */}
               
               <Link
                 className={styles.menuItem}
-                to="/contact"
+                to="/about"
                 onClick={() => setOpen(false)}
               >
                 About

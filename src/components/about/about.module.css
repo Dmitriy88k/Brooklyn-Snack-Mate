@@ -1,0 +1,270 @@
+/* aboutPage.module.css */
+.page {
+  min-height: 100vh;
+  background: #070707;
+  padding-top: 11rem; /* header is fixed */
+  padding-left: clamp(16px, 4vw, 28px);
+  padding-right: clamp(16px, 4vw, 28px);
+  padding-bottom: 64px;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+/* Narrower (about ~25% less than 1200px) */
+.shell {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.header {
+  text-align: center;
+  padding: 22px 10px 26px;
+}
+
+.title {
+  margin: 0;
+  color: #fbd160;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  line-height: 1.08;
+  animation: neonPulse 4.5s ease-in-out infinite;
+  will-change: text-shadow;
+}
+
+/* Single card */
+.card {
+  position: relative;
+  border-radius: 18px;
+  background: rgba(45, 44, 53, 0.72);
+  border: 1px solid rgba(251, 209, 96, 0.18);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  overflow: hidden;
+  padding: 22px;
+  margin-top: 18px;
+}
+
+/* subtle glow */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(
+    circle,
+    rgba(251, 209, 96, 0.18) 0%,
+    rgba(251, 209, 96, 0.08) 26%,
+    transparent 60%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+/* Prevent “newspaper wall” */
+.section {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 16px;
+}
+
+.paragraph {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.88);
+  line-height: 1.75;
+  font-size: 15px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(251, 209, 96, 0.18);
+  margin: 28px 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: #fff;
+  font-size: 18px;
+  letter-spacing: 0.02em;
+  font-weight: 900;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  text-align: center;
+}
+
+/* Steps: readable blocks */
+.steps {
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 18px;
+}
+
+.step {
+  border: 1px solid rgba(251, 209, 96, 0.14);
+  background: rgba(7, 7, 7, 0.35);
+  border-radius: 14px;
+  padding: 14px 14px 12px;
+}
+
+.stepHeader {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.stepNumber {
+  display: inline-flex;
+  width: 26px;
+  height: 26px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  background: rgba(251, 209, 96, 0.18);
+  border: 1px solid rgba(251, 209, 96, 0.22);
+  color: #fbd160;
+  font-weight: 900;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  flex: 0 0 auto;
+}
+
+.stepTitle {
+  margin: 0;
+  color: #fbd160; /* same as stepNumber */
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+.stepText {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  line-height: 1.7;
+  font-size: 14px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+/* CTA centered */
+/* CTA as a separated mini-card (fixes the “odd” feel) */
+.ctaWrap {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  margin-top: 32px;
+  padding: 18px;
+
+  border-radius: 14px;
+  border: 1px solid rgba(251, 209, 96, 0.14);
+  background: rgba(7, 7, 7, 0.28);
+}
+
+.ctaText {
+  display: grid;
+  gap: 6px;
+}
+
+.ctaLead {
+  margin: 0;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  line-height: 1.25;
+}
+
+.ctaSub {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  line-height: 1.65;
+  font-size: 14px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  max-width: 60ch;
+}
+
+
+/* Contact button (matches your header button behavior) */
+/* Contact button (simple scale on hover — no sliding) */
+.contactButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: fit-content;
+
+  background: linear-gradient(135deg, #fbd160 0%, #f8ae02 45%, #8f5f0c 100%);
+  color: #2d2c35;
+  text-decoration: none;
+
+  border-radius: 10px;
+  padding: 10px 16px;
+  min-width: 160px;
+
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  transition: transform 200ms ease, box-shadow 200ms ease, filter 200ms ease;
+  transform-origin: center;
+}
+
+.contactButton:hover {
+  transform: scale(1.06);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+  filter: brightness(1.01);
+}
+
+.contactButton:active {
+  transform: scale(1.03);
+}
+
+.contactButton,
+.contactButton:visited,
+.contactButton:hover,
+.contactButton:active,
+.contactButton:focus {
+  color: #2d2c35;
+}
+
+
+/* Mobile sizing only (no hover padding, no text movement) */
+@media (max-width: 700px) {
+  .ctaWrap {
+    padding: 16px;
+  }
+
+  .ctaLead {
+    font-size: 17px;
+  }
+
+  .contactButton {
+    width: 90%;          /* full width on mobile feels cleaner */
+    min-width: 0;
+  }
+}
+
+
+
+@keyframes neonPulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(251, 209, 96, 0.6),
+      0 0 30px rgba(251, 209, 96, 0.35);
+  }
+  50% {
+    text-shadow:
+      0 0 16px rgba(251, 209, 96, 0.85),
+      0 0 48px rgba(251, 209, 96, 0.55);
+  }
+}

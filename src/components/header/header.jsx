@@ -30,11 +30,10 @@ export default function Header() {
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
 
-          <Link >Machines</Link>
-          <Link >Catalog</Link>
-          <Link >FAQs</Link>
-          <Link >About</Link>
-          <Link to="/survey">Survey</Link>
+          {/* <Link to="/survey">Survey</Link> */}
+          {/* <Link >Catalog</Link> */}
+          {/* <Link >FAQs</Link> */}
+          <Link to="/about" >About</Link>
         </nav>
 
         <Link to="/contact" className={styles.contactButton}>
@@ -99,41 +98,33 @@ export default function Header() {
                 ease: "easeInOut",
               }}
             >
-              <Link 
+              {/* <Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
-                Machines
-              </Link>
+                Survey
+              </Link> */}
 
-              <Link 
+              {/* <Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
                 Catalog
-              </Link>
+              </Link> */}
               
-              <Link
+              {/* <Link
                 className={styles.menuItem}
                 to="/contact"
                 onClick={() => setOpen(false)}
               >
                 FAQs
-              </Link>
+              </Link> */}
               
               <Link
                 className={styles.menuItem}
-                to="/contact"
-                onClick={() => setOpen(false)}
-              >
-                About
-              </Link>
-
-              <Link
-                className={styles.menuItem}
-                to="/contact"
+                to="/about"
                 onClick={() => setOpen(false)}
               >
                 Survey

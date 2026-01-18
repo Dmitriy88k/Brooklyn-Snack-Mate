@@ -30,10 +30,11 @@ export default function Header() {
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
 
+          <Link to="/survey">Machines</Link> 
+          {/* <Link >Products</Link> */}
           {/* <Link to="/survey">Survey</Link> */}
-          {/* <Link >Catalog</Link> */}
+          <Link to="/about" >About Us</Link>
           {/* <Link >FAQs</Link> */}
-          <Link to="/about" >About</Link>
         </nav>
 
         <Link to="/contact" className={styles.contactButton}>
@@ -98,6 +99,22 @@ export default function Header() {
                 ease: "easeInOut",
               }}
             >
+               <Link 
+                className={styles.menuItem} 
+                to="/"
+                onClick={() => setOpen(false)}
+              >
+                Machines
+              </Link> 
+
+              {/* <Link 
+                className={styles.menuItem} 
+                to="/"
+                onClick={() => setOpen(false)}
+              >
+                Products
+              </Link> */}
+
               {/* <Link 
                 className={styles.menuItem} 
                 to="/"
@@ -106,13 +123,13 @@ export default function Header() {
                 Survey
               </Link> */}
 
-              {/* <Link 
-                className={styles.menuItem} 
-                to="/"
+              <Link
+                className={styles.menuItem}
+                to="/about"
                 onClick={() => setOpen(false)}
               >
-                Catalog
-              </Link> */}
+                About Us
+              </Link>
               
               {/* <Link
                 className={styles.menuItem}
@@ -122,13 +139,7 @@ export default function Header() {
                 FAQs
               </Link> */}
               
-              <Link
-                className={styles.menuItem}
-                to="/about"
-                onClick={() => setOpen(false)}
-              >
-                Survey
-              </Link>
+              
             </motion.div>
           )}
         </AnimatePresence>

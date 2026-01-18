@@ -1,4 +1,4 @@
-// AboutPage.jsx
+import { motion } from "framer-motion";
 import styles from "./about.module.css";
 
 export default function AboutPage() {
@@ -9,7 +9,15 @@ export default function AboutPage() {
           <h1 className={styles.title}>About Us</h1>
         </header>
 
-        <section className={styles.card}>
+        <motion.section
+          className={styles.card}
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{
+            duration: 0.75,
+            ease: [0.22, 1, 0.36, 1], // smooth "easeOutExpo-ish"
+          }}
+        >
           {/* ABOUT */}
           <section className={styles.section}>
             <p className={styles.paragraph}>
@@ -142,7 +150,7 @@ export default function AboutPage() {
               Contact Us
             </a>
           </section>
-        </section>
+        </motion.section>
       </section>
     </main>
   );

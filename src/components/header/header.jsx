@@ -30,10 +30,11 @@ export default function Header() {
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
 
-          {/* <Link to="/survey">Survey</Link> */}
-          {/* <Link >Catalog</Link> */}
+          <Link to="/survey">Machines</Link> 
+          {/* <Link >Products</Link> */}
+          <Link to="/feedback">Feedback</Link> 
+          <Link to="/about" >About Us</Link>
           {/* <Link >FAQs</Link> */}
-          <Link to="/about" >About</Link>
         </nav>
 
         <Link to="/contact" className={styles.contactButton}>
@@ -98,21 +99,37 @@ export default function Header() {
                 ease: "easeInOut",
               }}
             >
-              {/* <Link 
+               <Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
-                Survey
-              </Link> */}
+                Machines
+              </Link> 
 
               {/* <Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
-                Catalog
+                Products
               </Link> */}
+
+              <Link 
+                className={styles.menuItem} 
+                to="/feedback"
+                onClick={() => setOpen(false)}
+              >
+                Feedback
+              </Link> 
+
+              <Link
+                className={styles.menuItem}
+                to="/about"
+                onClick={() => setOpen(false)}
+              >
+                About Us
+              </Link>
               
               {/* <Link
                 className={styles.menuItem}
@@ -122,13 +139,7 @@ export default function Header() {
                 FAQs
               </Link> */}
               
-              <Link
-                className={styles.menuItem}
-                to="/about"
-                onClick={() => setOpen(false)}
-              >
-                Survey
-              </Link>
+              
             </motion.div>
           )}
         </AnimatePresence>

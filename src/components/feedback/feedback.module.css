@@ -1,0 +1,552 @@
+/* feedback.module.css */
+
+/* ===== Page + Shell ===== */
+.page {
+  min-height: 100vh;
+  background: #070707;
+  padding-top: 11rem; /* header is fixed */
+  padding-left: clamp(16px, 4vw, 28px);
+  padding-right: clamp(16px, 4vw, 28px);
+  padding-bottom: 64px;
+  box-sizing: border-box;
+  overflow-x: clip;
+}
+
+.shell {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+/* Prevent grid overflow + overlap */
+.panelLeft,
+.panelRight,
+.tileBody,
+.field,
+.formGrid,
+.bottomRow {
+  min-width: 0;
+}
+
+/* ===== Unique Hero ===== */
+.hero {
+  text-align: left;
+  padding: 10px 0 18px;
+  display: grid;
+  gap: 14px;
+}
+
+.heroTop {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.title {
+  margin: 0;
+  color: #fbd160;
+  font-weight: 900;
+  letter-spacing: 0.03em;
+  font-size: clamp(2.3rem, 4vw, 3rem);
+  line-height: 1.08;
+  animation: neonPulse 4.5s ease-in-out infinite;
+  will-change: text-shadow;
+}
+
+.hud {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hudItem {
+  border: 1px solid rgba(251, 209, 96, 0.14);
+  background: rgba(45, 44, 53, 0.3);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-width: 170px;
+}
+
+.hudLabel {
+  display: block;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+.hudValue {
+  display: block;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  margin-top: 4px;
+}
+
+/* Stepper flow */
+.flow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(251, 209, 96, 0.12);
+  background: rgba(7, 7, 7, 0.35);
+}
+
+.flowNode {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.flowLine {
+  width: 26px;
+  height: 1px;
+  background: rgba(251, 209, 96, 0.2);
+}
+
+.flowDot,
+.flowDotActive {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 209, 96, 0.25);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.flowDotActive {
+  background: rgba(251, 209, 96, 0.65);
+  box-shadow: 0 0 0 3px rgba(251, 209, 96, 0.12);
+}
+
+.flowText {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 13px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.heroSub {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 14px;
+  line-height: 1.6;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+/* ===== Main Layout: Board ===== */
+.board {
+  position: relative;
+  border-radius: 18px;
+  background: rgba(45, 44, 53, 0.72);
+  border: 1px solid rgba(251, 209, 96, 0.18);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.45),
+    0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+  overflow: hidden;
+  padding: 18px;
+
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 16px;
+}
+
+.board::before {
+  content: "";
+  position: absolute;
+  inset: -40px;
+  background: radial-gradient(
+    circle,
+    rgba(251, 209, 96, 0.18) 0%,
+    rgba(251, 209, 96, 0.08) 26%,
+    transparent 60%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+@media (max-width: 900px) {
+  .board {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+}
+
+.panelLeft,
+.panelRight {
+  position: relative;
+  z-index: 1;
+}
+
+/* ===== Left Panel ===== */
+.panelTitle {
+  color: #fff;
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 0.02em;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  margin-bottom: 12px;
+}
+
+.tiles {
+  display: grid;
+  gap: 12px;
+}
+
+/* Wrapper per tile + its inline form (mobile) */
+.tileBlock {
+  display: grid;
+  gap: 10px;
+}
+
+.tile {
+  width: 100%;
+  text-align: left;
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) 22px;
+  gap: 12px;
+  align-items: center;
+
+  border-radius: 16px;
+  padding: 14px;
+
+  border: 1px solid rgba(251, 209, 96, 0.14);
+  background: rgba(7, 7, 7, 0.35);
+  cursor: pointer;
+
+  transition: border-color 180ms ease, box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.tileActive {
+  border-color: rgba(251, 209, 96, 0.35);
+  background: rgba(251, 209, 96, 0.06);
+}
+
+/* SVG icon sizing */
+.iconSvg {
+  width: 22px;
+  height: 22px;
+  color: #fbd160;
+}
+
+.tileIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(251, 209, 96, 0.12);
+  border: 1px solid rgba(251, 209, 96, 0.18);
+  color: #fbd160;
+  font-size: 0; /* prevents svg baseline spacing */
+}
+
+.tileBody {
+  display: grid;
+  gap: 6px;
+}
+
+.tileTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tileTitle {
+  color: #fbd160;
+  font-weight: 900;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.tileBadge {
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(251, 209, 96, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  padding: 6px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.tileDesc {
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 14px;
+  line-height: 1.55;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+.tileArrow {
+  color: rgba(251, 209, 96, 0.8);
+  font-weight: 900;
+  font-size: 18px;
+  justify-self: end;
+}
+
+.smallNote {
+  margin-top: 12px;
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 13px;
+  line-height: 1.55;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+/* ===== Mobile Inline Form (opens right under tapped tile) ===== */
+.inlineFormWrap {
+  overflow: hidden;
+}
+
+.inlineFormInner {
+  border-radius: 16px;
+  border: 1px solid rgba(251, 209, 96, 0.12);
+  background: rgba(7, 7, 7, 0.22);
+  padding: 10px;
+}
+
+/* ===== Right Panel (desktop) ===== */
+.idleCard {
+  border-radius: 16px;
+  border: 1px solid rgba(251, 209, 96, 0.12);
+  background: rgba(7, 7, 7, 0.28);
+  padding: 16px;
+}
+
+.idleTitle {
+  color: #fff;
+  font-weight: 900;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  margin-bottom: 8px;
+}
+
+.idleText {
+  color: rgba(255, 255, 255, 0.78);
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+.idleMini {
+  margin-top: 14px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.68);
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.idleMiniDot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(251, 209, 96, 0.6);
+  box-shadow: 0 0 0 3px rgba(251, 209, 96, 0.12);
+}
+
+/* ===== Drawer Form (used on desktop right + mobile inline) ===== */
+.drawer {
+  border-radius: 16px;
+  border: 1px solid rgba(251, 209, 96, 0.12);
+  background: rgba(7, 7, 7, 0.28);
+  padding: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.drawerHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+}
+
+.drawerKicker {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+}
+
+.drawerTitle {
+  color: #fff;
+  font-weight: 900;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  margin-top: 4px;
+}
+
+/* "X" close button (mobile + desktop) */
+.closeX {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 209, 96, 0.18);
+  background: rgba(7, 7, 7, 0.35);
+  color: rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  font-size: 25px;
+  line-height: 0;
+  display: grid;
+  place-items: center;
+  transition: transform 160ms ease, border-color 160ms ease;
+  align-self: center;
+}
+
+.closeX:hover {
+  transform: scale(1.04);
+  border-color: rgba(251, 209, 96, 0.28);
+}
+
+/* Form grid */
+.formGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.full {
+  grid-column: 1 / -1;
+}
+
+@media (max-width: 700px) {
+  .formGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.quickRow {
+  grid-column: 1 / -1;
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.quick {
+  border-radius: 999px;
+  border: 1px solid rgba(251, 209, 96, 0.14);
+  background: rgba(255, 255, 255, 0.04);
+  color: rgba(255, 255, 255, 0.84);
+  padding: 8px 10px;
+  font-weight: 900;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.quickOn {
+  background: rgba(251, 209, 96, 0.14);
+  border-color: rgba(251, 209, 96, 0.28);
+  color: #fbd160;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  color: rgba(255, 255, 255, 0.8);
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  font-size: 13px;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 12px;
+  border: 1px solid rgba(251, 209, 96, 0.14);
+  background: rgba(7, 7, 7, 0.35);
+  color: rgba(255, 255, 255, 0.9);
+  padding: 10px 12px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  font-size: 14px;
+  outline: none;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 120px;
+  line-height: 1.6;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: rgba(251, 209, 96, 0.32);
+  box-shadow: 0 0 0 3px rgba(251, 209, 96, 0.08);
+}
+
+.hint {
+  color: rgba(255, 255, 255, 0.6);
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  font-size: 12px;
+}
+
+.divider {
+  height: 1px;
+  background: rgba(251, 209, 96, 0.14);
+  margin: 4px 0;
+}
+
+.bottomRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 170px;
+  gap: 12px;
+  align-items: end;
+}
+
+@media (max-width: 700px) {
+  .bottomRow {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Submit */
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: linear-gradient(135deg, #fbd160 0%, #f8ae02 45%, #8f5f0c 100%);
+  color: #2d2c35;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+.submit:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.22);
+}
+
+.submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ===== Animations ===== */
+@keyframes neonPulse {
+  0%,
+  100% {
+    text-shadow: 0 0 10px rgba(251, 209, 96, 0.6),
+      0 0 30px rgba(251, 209, 96, 0.35);
+  }
+  50% {
+    text-shadow: 0 0 16px rgba(251, 209, 96, 0.85),
+      0 0 48px rgba(251, 209, 96, 0.55);
+  }
+}

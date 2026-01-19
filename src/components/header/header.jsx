@@ -32,7 +32,7 @@ export default function Header() {
 
           <Link to="/survey">Machines</Link> 
           {/* <Link >Products</Link> */}
-          {/* <Link to="/survey">Survey</Link> */}
+          <Link to="/feedback">Feedback</Link> 
           <Link to="/about" >About Us</Link>
           {/* <Link >FAQs</Link> */}
         </nav>
@@ -115,13 +115,13 @@ export default function Header() {
                 Products
               </Link> */}
 
-              {/* <Link 
+              <Link 
                 className={styles.menuItem} 
-                to="/"
+                to="/feedback"
                 onClick={() => setOpen(false)}
               >
-                Survey
-              </Link> */}
+                Feedback
+              </Link> 
 
               <Link
                 className={styles.menuItem}

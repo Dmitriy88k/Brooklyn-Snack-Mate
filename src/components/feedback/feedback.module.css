@@ -1,4 +1,18 @@
-/* feedback.module.css */
+/* ===== Instant render, smooth reveal (no hydration blank screen) ===== */
+.reveal {
+  animation: feedbackReveal 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes feedbackReveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* ===== Page + Shell ===== */
 .page {
@@ -129,14 +143,6 @@
   letter-spacing: 0.02em;
 }
 
-.heroSub {
-  margin: 0;
-  color: rgba(255, 255, 255, 0.72);
-  font-size: 14px;
-  line-height: 1.6;
-  font-family: "Roboto Flex", system-ui, sans-serif;
-}
-
 /* ===== Main Layout: Board ===== */
 .board {
   position: relative;
@@ -201,6 +207,7 @@
   gap: 10px;
 }
 
+/* Category tile */
 .tile {
   width: 100%;
   text-align: left;
@@ -265,17 +272,6 @@
   font-size: 13px;
 }
 
-.tileBadge {
-  font-family: "Roboto Flex", system-ui, sans-serif;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(251, 209, 96, 0.14);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 6px 8px;
-  border-radius: 999px;
-  white-space: nowrap;
-}
-
 .tileDesc {
   color: rgba(255, 255, 255, 0.78);
   font-size: 14px;
@@ -298,9 +294,11 @@
   font-family: "Roboto Flex", system-ui, sans-serif;
 }
 
-/* ===== Mobile Inline Form (opens right under tapped tile) ===== */
+/* ===== Mobile Inline Form (NO rubber) ===== */
 .inlineFormWrap {
   overflow: hidden;
+  will-change: height;
+  transform: translateZ(0);
 }
 
 .inlineFormInner {
@@ -308,9 +306,16 @@
   border: 1px solid rgba(251, 209, 96, 0.12);
   background: rgba(7, 7, 7, 0.22);
   padding: 10px;
+
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 
 /* ===== Right Panel (desktop) ===== */
+.rightSizer {
+  width: 100%;
+}
+
 .idleCard {
   border-radius: 16px;
   border: 1px solid rgba(251, 209, 96, 0.12);
@@ -323,12 +328,6 @@
   font-weight: 900;
   font-family: "Roboto Flex", system-ui, sans-serif;
   margin-bottom: 8px;
-}
-
-.idleText {
-  color: rgba(255, 255, 255, 0.78);
-  font-family: "Roboto Flex", system-ui, sans-serif;
-  line-height: 1.6;
 }
 
 .idleMini {
@@ -357,6 +356,7 @@
   padding: 16px;
   display: grid;
   gap: 14px;
+  transform: translateZ(0);
 }
 
 .drawerHeader {
@@ -380,7 +380,20 @@
   margin-top: 4px;
 }
 
-/* "X" close button (mobile + desktop) */
+.drawerMeta {
+  margin-top: 6px;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 13px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  line-height: 1.5;
+}
+
+.drawerMeta span {
+  color: rgba(255, 255, 255, 0.92);
+  font-weight: 800;
+}
+
+/* "X" close */
 .closeX {
   width: 36px;
   height: 36px;
@@ -538,7 +551,30 @@
   box-shadow: none;
 }
 
-/* ===== Animations ===== */
+/* Status messages */
+.success,
+.error {
+  margin: 0;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-family: "Roboto Flex", system-ui, sans-serif;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.success {
+  border: 1px solid rgba(60, 210, 140, 0.25);
+  background: rgba(60, 210, 140, 0.1);
+  color: rgba(220, 255, 240, 0.95);
+}
+
+.error {
+  border: 1px solid rgba(255, 90, 90, 0.22);
+  background: rgba(255, 90, 90, 0.1);
+  color: rgba(255, 220, 220, 0.95);
+}
+
+/* Animations */
 @keyframes neonPulse {
   0%,
   100% {
@@ -550,3 +586,9 @@
       0 0 48px rgba(251, 209, 96, 0.55);
   }
 }
+
+:global(html) {
+  scrollbar-gutter: stable;
+}
+
+

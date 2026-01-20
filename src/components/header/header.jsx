@@ -30,7 +30,7 @@ export default function Header() {
       <div className={styles.rightGroup}>
         <nav className={styles.desktopNav}>
 
-          <Link to="/survey">Machines</Link> 
+          {/*<Link to="/survey">Machines</Link> */} 
           {/* <Link >Products</Link> */}
           <Link to="/feedback">Feedback</Link> 
           <Link to="/about" >About Us</Link>
@@ -99,13 +99,14 @@ export default function Header() {
                 ease: "easeInOut",
               }}
             >
-               <Link 
+              {/*<Link 
                 className={styles.menuItem} 
                 to="/"
                 onClick={() => setOpen(false)}
               >
                 Machines
               </Link> 
+              */}
 
               {/* <Link 
                 className={styles.menuItem} 

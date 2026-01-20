@@ -1,15 +1,17 @@
-// FeedbackPage.jsx
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState, useLayoutEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import styles from "./feedback.module.css";
 
 const FORMSPREE_URL = "https://formspree.io/f/xaqndryw";
 const ease = [0.22, 1, 0.36, 1];
 
+// Smoothness tuning (match About page feel)
+const DUR = 0.75;
+const Y = 24;
+
 /**
  * MACHINE DIRECTORY
  * - Each QR should point to: https://www.brooklynsnackmate.com/feedback?m=machine-01
- * - Add your real locations here.
  */
 const MACHINES = {
   "machine-01": {
@@ -24,7 +26,6 @@ const MACHINES = {
     label: "Barber Shop",
     address: "1555 Cropsey Ave, Brooklyn, NY 11204",
   },
-  
 };
 
 function getMachineFromUrl() {
@@ -33,12 +34,8 @@ function getMachineFromUrl() {
   const params = new URLSearchParams(window.location.search);
   const idFromUrl = (params.get("m") || "").trim();
 
-  // 1. If URL has machine → store it
-  if (idFromUrl) {
-    sessionStorage.setItem("activeMachine", idFromUrl);
-  }
+  if (idFromUrl) sessionStorage.setItem("activeMachine", idFromUrl);
 
-  // 2. Otherwise try restoring from session
   const storedId = idFromUrl || sessionStorage.getItem("activeMachine") || "";
 
   return {
@@ -46,7 +43,6 @@ function getMachineFromUrl() {
     info: storedId ? MACHINES[storedId] || null : null,
   };
 }
-
 
 function useIsMobile(breakpoint = 900) {
   const [isMobile, setIsMobile] = useState(false);
@@ -70,7 +66,106 @@ function useIsMobile(breakpoint = 900) {
   return isMobile;
 }
 
-/* Professional inline SVG icons */
+/** Measures a container’s content height and keeps it updated */
+function useMeasureHeight(deps = []) {
+  const ref = useRef(null);
+  const [height, setHeight] = useState(0);
+
+  useLayoutEffect(() => {
+    if (!ref.current) return;
+
+    const el = ref.current;
+
+    const measure = () => setHeight(el.scrollHeight);
+
+    measure();
+
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+
+    const raf = requestAnimationFrame(measure);
+
+    return () => {
+      ro.disconnect();
+      cancelAnimationFrame(raf);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, deps);
+
+  return { ref, height };
+}
+
+/**
+ * MobileCollapse: NO rubber effect.
+ * Key ideas:
+ * - Outer animates ONLY height (stiff timing + ease)
+ * - Inner animates transform/opacity (smooth timing)
+ * - When content height changes, we "lock" current height first, then animate to new height.
+ */
+
+function MobileCollapse({ open, children, className, ease }) {
+  const innerRef = useRef(null);
+  const [measured, setMeasured] = useState(0);
+  const [height, setHeight] = useState(0);
+
+  // Measure content height while mounted
+  useLayoutEffect(() => {
+    if (!innerRef.current) return;
+
+    const el = innerRef.current;
+    const measure = () => setMeasured(el.scrollHeight);
+
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+
+    return () => ro.disconnect();
+  }, []);
+
+  // Lock current rendered height, then animate to target (measured or 0)
+  useLayoutEffect(() => {
+    if (!innerRef.current) return;
+
+    const el = innerRef.current;
+
+    // Lock whatever height is on screen *right now* (prevents “chasing”)
+    const current = el.getBoundingClientRect().height;
+    setHeight(current);
+
+    const raf = requestAnimationFrame(() => {
+      setHeight(open ? measured : 0);
+    });
+
+    return () => cancelAnimationFrame(raf);
+  }, [open, measured]);
+
+  return (
+    <motion.div
+      className={className}
+      initial={false}
+      animate={{ height: open ? height : 0 }}
+      transition={{ duration: 0.42, ease: [0.25, 0.9, 0.25, 1] }}
+      style={{ overflow: "hidden", willChange: "height" }}
+    >
+      <motion.div
+        ref={innerRef}
+        initial={false}
+        animate={{ opacity: open ? 1 : 0, y: open ? 0 : -10 }}
+        transition={{ duration: 0.25, ease }}
+        style={{
+          pointerEvents: open ? "auto" : "none",
+          transform: "translateZ(0)",
+        }}
+        aria-hidden={!open}
+      >
+        {children}
+      </motion.div>
+    </motion.div>
+  );
+}
+
+
+/* Icons */
 function IconAlert(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
@@ -84,7 +179,6 @@ function IconAlert(props) {
     </svg>
   );
 }
-
 function IconBoxPlus(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
@@ -112,7 +206,6 @@ function IconBoxPlus(props) {
     </svg>
   );
 }
-
 function IconSpark(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
@@ -134,7 +227,6 @@ function IconSpark(props) {
     </svg>
   );
 }
-
 function IconMessage(props) {
   return (
     <svg viewBox="0 0 24 24" fill="none" {...props}>
@@ -188,18 +280,12 @@ function DrawerForm({
   cat,
   setCat,
   machine,
-
-  // status
   status,
   setStatus,
-
-  // shared
   contact,
   setContact,
   msg,
   setMsg,
-
-  // issue
   issueType,
   setIssueType,
   lostMoney,
@@ -210,8 +296,6 @@ function DrawerForm({
   setPayment,
   slot,
   setSlot,
-
-  // product
   productName,
   setProductName,
   productNotes,
@@ -232,26 +316,19 @@ function DrawerForm({
 
     try {
       const data = new FormData();
-
-      // Meta
       data.append("_format", "plain");
       data.append(
         "_subject",
         `New Customer Feedback (${cat.toUpperCase()}) — Brooklyn SnackMate`
       );
 
-      // Core fields
       data.append("category", cat);
-
-      // Machine fields (id + friendly label/address)
       data.append("machineId", machine?.id || "Not provided");
       data.append("machineLabel", machine?.info?.label || "");
       data.append("machineAddress", machine?.info?.address || "");
-
       data.append("contact", contact || "");
       data.append("message", msg || "");
 
-      // Category-specific
       if (cat === "issue") {
         data.append("issueType", issueType);
         data.append("lostMoney", lostMoney);
@@ -268,15 +345,11 @@ function DrawerForm({
       const res = await fetch(FORMSPREE_URL, {
         method: "POST",
         body: data,
-        headers: {
-          Accept: "application/json",
-        },
+        headers: { Accept: "application/json" },
       });
 
       if (res.ok) {
         setStatus("sent");
-
-        // reset fields (keep category open so user sees success)
         setMsg("");
         setContact("");
         setAmount("");
@@ -286,7 +359,7 @@ function DrawerForm({
       } else {
         setStatus("error");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
     }
   }
@@ -296,13 +369,12 @@ function DrawerForm({
 
   return (
     <motion.form
-      key={cat}
       className={styles.drawer}
       onSubmit={onSubmit}
-      initial={{ opacity: 0, y: 10 }}
+      initial={{ opacity: 0, y: Y }}
       animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -8 }}
-      transition={{ duration: 0.25, ease }}
+      exit={{ opacity: 0, y: -18 }}
+      transition={{ duration: DUR, ease }}
     >
       <div className={styles.drawerHeader}>
         <div>
@@ -321,7 +393,6 @@ function DrawerForm({
           )}
         </div>
 
-        {/* X close */}
         <button
           type="button"
           className={styles.closeX}
@@ -404,17 +475,25 @@ function DrawerForm({
             </select>
           </label>
 
-          {lostMoney === "yes" && (
-            <label className={styles.field}>
-              <span className={styles.label}>Amount (approx.)</span>
-              <input
-                className={styles.input}
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
-                placeholder="$2.50"
-              />
-            </label>
-          )}
+          <AnimatePresence initial={false}>
+            {lostMoney === "yes" && (
+              <motion.label
+                className={styles.field}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: DUR, ease }}
+              >
+                <span className={styles.label}>Amount (approx.)</span>
+                <input
+                  className={styles.input}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="$2.50"
+                />
+              </motion.label>
+            )}
+          </AnimatePresence>
 
           <label className={styles.field}>
             <span className={styles.label}>Slot (optional)</span>
@@ -536,15 +615,31 @@ function DrawerForm({
         </button>
       </div>
 
-      {status === "sent" && (
-        <p className={styles.success}>✅ Sent. Thanks — we review feedback regularly.</p>
-      )}
+      <AnimatePresence initial={false}>
+        {status === "sent" && (
+          <motion.p
+            className={styles.success}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: DUR, ease }}
+          >
+            ✅ Sent. Thanks — we review feedback regularly.
+          </motion.p>
+        )}
 
-      {status === "error" && (
-        <p className={styles.error}>
-          Something went wrong. Please call or email us instead.
-        </p>
-      )}
+        {status === "error" && (
+          <motion.p
+            className={styles.error}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -12 }}
+            transition={{ duration: DUR, ease }}
+          >
+            Something went wrong. Please call or email us instead.
+          </motion.p>
+        )}
+      </AnimatePresence>
     </motion.form>
   );
 }
@@ -554,7 +649,7 @@ export default function FeedbackPage() {
   const isMobile = useIsMobile(900);
 
   const [cat, setCat] = useState(null);
-  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const [status, setStatus] = useState("idle");
 
   // shared
   const [contact, setContact] = useState("");
@@ -571,6 +666,12 @@ export default function FeedbackPage() {
   const [productName, setProductName] = useState("");
   const [productNotes, setProductNotes] = useState("");
 
+  // Desktop right-panel height smoother
+  const { ref: rightInnerRef, height: rightInnerHeight } = useMeasureHeight([
+    cat,
+    isMobile,
+  ]);
+
   function toggleCategory(key) {
     setStatus("idle");
     setCat((prev) => (prev === key ? null : key));
@@ -581,7 +682,7 @@ export default function FeedbackPage() {
 
   return (
     <main className={styles.page}>
-      <section className={styles.shell}>
+      <section className={`${styles.shell} ${styles.reveal}`}>
         <header className={styles.hero}>
           <div className={styles.heroTop}>
             <h1 className={styles.title}>Feedback Center</h1>
@@ -628,7 +729,9 @@ export default function FeedbackPage() {
                   <div key={c.key} className={styles.tileBlock}>
                     <motion.button
                       type="button"
-                      className={`${styles.tile} ${active ? styles.tileActive : ""}`}
+                      className={`${styles.tile} ${
+                        active ? styles.tileActive : ""
+                      }`}
                       onClick={() => toggleCategory(c.key)}
                       whileHover={!isMobile ? { y: -2 } : undefined}
                       whileTap={{ scale: 0.99 }}
@@ -648,47 +751,37 @@ export default function FeedbackPage() {
                       </div>
                     </motion.button>
 
-                    {/* MOBILE INLINE FORM */}
+                    {/* MOBILE INLINE FORM (stable height, no rubber) */}
                     {isMobile && (
-                      <AnimatePresence initial={false}>
-                        {active && (
-                          <motion.div
-                            className={styles.inlineFormWrap}
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.25, ease }}
-                          >
-                            <div className={styles.inlineFormInner}>
-                              <DrawerForm
-                                cat={cat}
-                                setCat={setCat}
-                                machine={machine}
-                                status={status}
-                                setStatus={setStatus}
-                                contact={contact}
-                                setContact={setContact}
-                                msg={msg}
-                                setMsg={setMsg}
-                                issueType={issueType}
-                                setIssueType={setIssueType}
-                                lostMoney={lostMoney}
-                                setLostMoney={setLostMoney}
-                                amount={amount}
-                                setAmount={setAmount}
-                                payment={payment}
-                                setPayment={setPayment}
-                                slot={slot}
-                                setSlot={setSlot}
-                                productName={productName}
-                                setProductName={setProductName}
-                                productNotes={productNotes}
-                                setProductNotes={setProductNotes}
-                              />
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                      <MobileCollapse open={active} className={styles.inlineFormWrap}>
+                        <div className={styles.inlineFormInner}>
+                          <DrawerForm
+                            cat={cat}
+                            setCat={setCat}
+                            machine={machine}
+                            status={status}
+                            setStatus={setStatus}
+                            contact={contact}
+                            setContact={setContact}
+                            msg={msg}
+                            setMsg={setMsg}
+                            issueType={issueType}
+                            setIssueType={setIssueType}
+                            lostMoney={lostMoney}
+                            setLostMoney={setLostMoney}
+                            amount={amount}
+                            setAmount={setAmount}
+                            payment={payment}
+                            setPayment={setPayment}
+                            slot={slot}
+                            setSlot={setSlot}
+                            productName={productName}
+                            setProductName={setProductName}
+                            productNotes={productNotes}
+                            setProductNotes={setProductNotes}
+                          />
+                        </div>
+                      </MobileCollapse>
                     )}
                   </div>
                 );
@@ -700,59 +793,76 @@ export default function FeedbackPage() {
             </div>
           </div>
 
-          {/* DESKTOP RIGHT PANEL ONLY */}
+          {/* DESKTOP RIGHT PANEL ONLY (smooth board expansion) */}
           {!isMobile && (
             <div className={styles.panelRight}>
-              <AnimatePresence mode="wait">
-                {!cat ? (
-                  <motion.div
-                    key="idle"
-                    className={styles.idle}
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.25 }}
-                  >
-                    <div className={styles.idleCard}>
-                      <div className={styles.idleTitle}>
-                        Let us know how we can improve your experience.
-                      </div>
-                      <div className={styles.idleMini}>
-                        <span className={styles.idleMiniDot} />
-                        <span>
-                          This message goes directly to the person who operates this machine.
-                        </span>
-                      </div>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <DrawerForm
-                    cat={cat}
-                    setCat={setCat}
-                    machine={machine}
-                    status={status}
-                    setStatus={setStatus}
-                    contact={contact}
-                    setContact={setContact}
-                    msg={msg}
-                    setMsg={setMsg}
-                    issueType={issueType}
-                    setIssueType={setIssueType}
-                    lostMoney={lostMoney}
-                    setLostMoney={setLostMoney}
-                    amount={amount}
-                    setAmount={setAmount}
-                    payment={payment}
-                    setPayment={setPayment}
-                    slot={slot}
-                    setSlot={setSlot}
-                    productName={productName}
-                    setProductName={setProductName}
-                    productNotes={productNotes}
-                    setProductNotes={setProductNotes}
-                  />
-                )}
-              </AnimatePresence>
+              <motion.div
+                className={styles.rightSizer}
+                animate={{ height: rightInnerHeight || "auto" }}
+                transition={{ duration: DUR, ease }}
+                style={{ overflow: "hidden" }}
+              >
+                <div ref={rightInnerRef}>
+                  <AnimatePresence mode="wait" initial={false}>
+                    {!cat ? (
+                      <motion.div
+                        key="idle"
+                        className={styles.idle}
+                        initial={{ opacity: 0, y: Y }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -18 }}
+                        transition={{ duration: DUR, ease }}
+                      >
+                        <div className={styles.idleCard}>
+                          <div className={styles.idleTitle}>
+                            Let us know how we can improve your experience.
+                          </div>
+                          <div className={styles.idleMini}>
+                            <span className={styles.idleMiniDot} />
+                            <span>
+                              This message goes directly to the person who operates this machine.
+                            </span>
+                          </div>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key={`desktop-form-${cat}`}
+                        initial={{ opacity: 0, y: Y }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -18 }}
+                        transition={{ duration: DUR, ease }}
+                      >
+                        <DrawerForm
+                          cat={cat}
+                          setCat={setCat}
+                          machine={machine}
+                          status={status}
+                          setStatus={setStatus}
+                          contact={contact}
+                          setContact={setContact}
+                          msg={msg}
+                          setMsg={setMsg}
+                          issueType={issueType}
+                          setIssueType={setIssueType}
+                          lostMoney={lostMoney}
+                          setLostMoney={setLostMoney}
+                          amount={amount}
+                          setAmount={setAmount}
+                          payment={payment}
+                          setPayment={setPayment}
+                          slot={slot}
+                          setSlot={setSlot}
+                          productName={productName}
+                          setProductName={setProductName}
+                          productNotes={productNotes}
+                          setProductNotes={setProductNotes}
+                        />
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
             </div>
           )}
         </section>

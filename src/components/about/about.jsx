@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState } from "react";
 import styles from "./about.module.css";
+import { Link } from "react-router-dom";
 
 /* Detect mobile BEFORE first render */
 function isMobileNow() {
@@ -179,9 +180,10 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <a className={styles.contactButton} href="/contact">
+            <Link to="/contact" className={styles.contactButton}>
               Contact Us
-            </a>
+            </Link>
+
           </section>
         </motion.section>
       </section>

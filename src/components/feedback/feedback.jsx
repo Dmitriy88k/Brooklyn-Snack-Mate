@@ -1,11 +1,12 @@
+// feedback.jsx
 import { useEffect, useMemo, useRef, useState, useLayoutEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import styles from "./feedback.module.css";
 
 const FORMSPREE_URL = "https://formspree.io/f/xaqndryw";
 const ease = [0.22, 1, 0.36, 1];
 
-// Smoothness tuning (match About page feel)
+// Desktop animation only
 const DUR = 0.75;
 const Y = 24;
 
@@ -66,7 +67,7 @@ function useIsMobile(breakpoint = 900) {
   return isMobile;
 }
 
-/** Measures a container’s content height and keeps it updated */
+/** Measures a container’s content height and keeps it updated (desktop only) */
 function useMeasureHeight(deps = []) {
   const ref = useRef(null);
   const [height, setHeight] = useState(0);
@@ -75,7 +76,6 @@ function useMeasureHeight(deps = []) {
     if (!ref.current) return;
 
     const el = ref.current;
-
     const measure = () => setHeight(el.scrollHeight);
 
     measure();
@@ -94,76 +94,6 @@ function useMeasureHeight(deps = []) {
 
   return { ref, height };
 }
-
-/**
- * MobileCollapse: NO rubber effect.
- * Key ideas:
- * - Outer animates ONLY height (stiff timing + ease)
- * - Inner animates transform/opacity (smooth timing)
- * - When content height changes, we "lock" current height first, then animate to new height.
- */
-
-function MobileCollapse({ open, children, className, ease }) {
-  const innerRef = useRef(null);
-  const [measured, setMeasured] = useState(0);
-  const [height, setHeight] = useState(0);
-
-  // Measure content height while mounted
-  useLayoutEffect(() => {
-    if (!innerRef.current) return;
-
-    const el = innerRef.current;
-    const measure = () => setMeasured(el.scrollHeight);
-
-    measure();
-    const ro = new ResizeObserver(measure);
-    ro.observe(el);
-
-    return () => ro.disconnect();
-  }, []);
-
-  // Lock current rendered height, then animate to target (measured or 0)
-  useLayoutEffect(() => {
-    if (!innerRef.current) return;
-
-    const el = innerRef.current;
-
-    // Lock whatever height is on screen *right now* (prevents “chasing”)
-    const current = el.getBoundingClientRect().height;
-    setHeight(current);
-
-    const raf = requestAnimationFrame(() => {
-      setHeight(open ? measured : 0);
-    });
-
-    return () => cancelAnimationFrame(raf);
-  }, [open, measured]);
-
-  return (
-    <motion.div
-      className={className}
-      initial={false}
-      animate={{ height: open ? height : 0 }}
-      transition={{ duration: 0.42, ease: [0.25, 0.9, 0.25, 1] }}
-      style={{ overflow: "hidden", willChange: "height" }}
-    >
-      <motion.div
-        ref={innerRef}
-        initial={false}
-        animate={{ opacity: open ? 1 : 0, y: open ? 0 : -10 }}
-        transition={{ duration: 0.25, ease }}
-        style={{
-          pointerEvents: open ? "auto" : "none",
-          transform: "translateZ(0)",
-        }}
-        aria-hidden={!open}
-      >
-        {children}
-      </motion.div>
-    </motion.div>
-  );
-}
-
 
 /* Icons */
 function IconAlert(props) {
@@ -300,6 +230,7 @@ function DrawerForm({
   setProductName,
   productNotes,
   setProductNotes,
+  reduceMotion,
 }) {
   const canSubmit = useMemo(() => {
     if (!cat) return false;
@@ -367,14 +298,20 @@ function DrawerForm({
   const machineDisplay =
     machine?.info?.label || (machine?.id ? machine.id : "Not provided");
 
+  const FormTag = reduceMotion ? "form" : motion.form;
+
   return (
-    <motion.form
+    <FormTag
       className={styles.drawer}
       onSubmit={onSubmit}
-      initial={{ opacity: 0, y: Y }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -18 }}
-      transition={{ duration: DUR, ease }}
+      {...(!reduceMotion
+        ? {
+            initial: { opacity: 0, y: Y },
+            animate: { opacity: 1, y: 0 },
+            exit: { opacity: 0, y: -18 },
+            transition: { duration: DUR, ease },
+          }
+        : {})}
     >
       <div className={styles.drawerHeader}>
         <div>
@@ -406,7 +343,6 @@ function DrawerForm({
         </button>
       </div>
 
-      {/* ISSUE */}
       {cat === "issue" && (
         <div className={styles.formGrid}>
           <div className={styles.quickRow}>
@@ -475,25 +411,17 @@ function DrawerForm({
             </select>
           </label>
 
-          <AnimatePresence initial={false}>
-            {lostMoney === "yes" && (
-              <motion.label
-                className={styles.field}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: DUR, ease }}
-              >
-                <span className={styles.label}>Amount (approx.)</span>
-                <input
-                  className={styles.input}
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="$2.50"
-                />
-              </motion.label>
-            )}
-          </AnimatePresence>
+          {lostMoney === "yes" && (
+            <label className={styles.field}>
+              <span className={styles.label}>Amount (approx.)</span>
+              <input
+                className={styles.input}
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="$2.50"
+              />
+            </label>
+          )}
 
           <label className={styles.field}>
             <span className={styles.label}>Slot (optional)</span>
@@ -522,7 +450,6 @@ function DrawerForm({
         </div>
       )}
 
-      {/* PRODUCT */}
       {cat === "product" && (
         <div className={styles.formGrid}>
           <label className={styles.field}>
@@ -559,7 +486,6 @@ function DrawerForm({
         </div>
       )}
 
-      {/* IMPROVE */}
       {cat === "improve" && (
         <div className={styles.formGrid}>
           <label className={`${styles.field} ${styles.full}`}>
@@ -576,7 +502,6 @@ function DrawerForm({
         </div>
       )}
 
-      {/* OTHER */}
       {cat === "other" && (
         <div className={styles.formGrid}>
           <label className={`${styles.field} ${styles.full}`}>
@@ -615,38 +540,49 @@ function DrawerForm({
         </button>
       </div>
 
-      <AnimatePresence initial={false}>
-        {status === "sent" && (
-          <motion.p
-            className={styles.success}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: DUR, ease }}
-          >
-            ✅ Sent. Thanks — we review feedback regularly.
-          </motion.p>
-        )}
+      {status === "sent" && (
+        <p className={styles.success}>✅ Sent. Thanks — we review feedback regularly.</p>
+      )}
 
-        {status === "error" && (
-          <motion.p
-            className={styles.error}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: DUR, ease }}
-          >
-            Something went wrong. Please call or email us instead.
-          </motion.p>
-        )}
-      </AnimatePresence>
-    </motion.form>
+      {status === "error" && (
+        <p className={styles.error}>
+          Something went wrong. Please call or email us instead.
+        </p>
+      )}
+    </FormTag>
+  );
+}
+
+function TileButton({ reduceMotion, active, className, onClick, children }) {
+  if (reduceMotion) {
+    // Mobile: plain button, zero framer-motion
+    return (
+      <button type="button" className={className} onClick={onClick}>
+        {children}
+      </button>
+    );
+  }
+
+  return (
+    <motion.button
+      type="button"
+      className={className}
+      onClick={onClick}
+      whileHover={{ y: -2 }}
+      whileTap={{ scale: 0.99 }}
+      transition={{ duration: 0.18, ease }}
+    >
+      {children}
+    </motion.button>
   );
 }
 
 export default function FeedbackPage() {
-  const machine = useMemo(() => getMachineFromUrl(), []);
+  const [machine, setMachine] = useState({ id: "", info: null });
+
   const isMobile = useIsMobile(900);
+  const prefersReduced = useReducedMotion();
+  const reduceMotion = isMobile || prefersReduced;
 
   const [cat, setCat] = useState(null);
   const [status, setStatus] = useState("idle");
@@ -666,11 +602,15 @@ export default function FeedbackPage() {
   const [productName, setProductName] = useState("");
   const [productNotes, setProductNotes] = useState("");
 
-  // Desktop right-panel height smoother
+  // Desktop right-panel height smoother (desktop only)
   const { ref: rightInnerRef, height: rightInnerHeight } = useMeasureHeight([
     cat,
     isMobile,
   ]);
+
+  useEffect(() => {
+    setMachine(getMachineFromUrl());
+  }, []);
 
   function toggleCategory(key) {
     setStatus("idle");
@@ -680,9 +620,11 @@ export default function FeedbackPage() {
   const machineDisplay =
     machine.info?.label || (machine.id ? machine.id : "Not provided");
 
+  const BoardTag = reduceMotion ? "section" : motion.section;
+
   return (
     <main className={styles.page}>
-      <section className={`${styles.shell} ${styles.reveal}`}>
+      <section className={styles.shell}>
         <header className={styles.hero}>
           <div className={styles.heroTop}>
             <h1 className={styles.title}>Feedback Center</h1>
@@ -717,7 +659,16 @@ export default function FeedbackPage() {
           </div>
         </header>
 
-        <section className={styles.board}>
+        <BoardTag
+          className={styles.board}
+          {...(!reduceMotion
+            ? {
+                initial: { opacity: 0, y: 24 },
+                animate: { opacity: 1, y: 0 },
+                transition: { duration: 0.75, ease },
+              }
+            : {})}
+        >
           <div className={styles.panelLeft}>
             <div className={styles.panelTitle}>Choose a category</div>
 
@@ -727,15 +678,13 @@ export default function FeedbackPage() {
 
                 return (
                   <div key={c.key} className={styles.tileBlock}>
-                    <motion.button
-                      type="button"
+                    <TileButton
+                      reduceMotion={reduceMotion}
+                      active={active}
                       className={`${styles.tile} ${
                         active ? styles.tileActive : ""
                       }`}
                       onClick={() => toggleCategory(c.key)}
-                      whileHover={!isMobile ? { y: -2 } : undefined}
-                      whileTap={{ scale: 0.99 }}
-                      transition={{ duration: 0.18, ease }}
                     >
                       <div className={styles.tileIcon} aria-hidden="true">
                         {c.icon}
@@ -749,14 +698,14 @@ export default function FeedbackPage() {
                       <div className={styles.tileArrow} aria-hidden="true">
                         →
                       </div>
-                    </motion.button>
+                    </TileButton>
 
-                    {/* MOBILE INLINE FORM (stable height, no rubber) */}
-                    {isMobile && (
-                      <MobileCollapse open={active} className={styles.inlineFormWrap}>
+                    {/* ✅ MOBILE: render directly under active tile (NO collapse, NO animation) */}
+                    {isMobile && active && (
+                      <div className={styles.inlineFormWrap}>
                         <div className={styles.inlineFormInner}>
                           <DrawerForm
-                            cat={cat}
+                            cat={c.key}
                             setCat={setCat}
                             machine={machine}
                             status={status}
@@ -779,9 +728,10 @@ export default function FeedbackPage() {
                             setProductName={setProductName}
                             productNotes={productNotes}
                             setProductNotes={setProductNotes}
+                            reduceMotion={true}
                           />
                         </div>
-                      </MobileCollapse>
+                      </div>
                     )}
                   </div>
                 );
@@ -793,7 +743,7 @@ export default function FeedbackPage() {
             </div>
           </div>
 
-          {/* DESKTOP RIGHT PANEL ONLY (smooth board expansion) */}
+          {/* DESKTOP RIGHT PANEL ONLY */}
           {!isMobile && (
             <div className={styles.panelRight}>
               <motion.div
@@ -857,6 +807,7 @@ export default function FeedbackPage() {
                           setProductName={setProductName}
                           productNotes={productNotes}
                           setProductNotes={setProductNotes}
+                          reduceMotion={false}
                         />
                       </motion.div>
                     )}
@@ -865,7 +816,7 @@ export default function FeedbackPage() {
               </motion.div>
             </div>
           )}
-        </section>
+        </BoardTag>
       </section>
     </main>
   );

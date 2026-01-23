@@ -1,20 +1,5 @@
-/* ===== Instant render, smooth reveal (no hydration blank screen) ===== */
-.reveal {
-  animation: feedbackReveal 0.75s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
+/* feedback.module.css */
 
-@keyframes feedbackReveal {
-  from {
-    opacity: 0;
-    transform: translateY(24px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===== Page + Shell ===== */
 .page {
   min-height: 100vh;
   background: #070707;
@@ -41,7 +26,7 @@
   min-width: 0;
 }
 
-/* ===== Unique Hero ===== */
+/* ===== Hero ===== */
 .hero {
   text-align: left;
   padding: 10px 0 18px;
@@ -143,7 +128,7 @@
   letter-spacing: 0.02em;
 }
 
-/* ===== Main Layout: Board ===== */
+/* ===== Board ===== */
 .board {
   position: relative;
   border-radius: 18px;
@@ -201,13 +186,11 @@
   gap: 12px;
 }
 
-/* Wrapper per tile + its inline form (mobile) */
 .tileBlock {
   display: grid;
   gap: 10px;
 }
 
-/* Category tile */
 .tile {
   width: 100%;
   text-align: left;
@@ -232,7 +215,6 @@
   background: rgba(251, 209, 96, 0.06);
 }
 
-/* SVG icon sizing */
 .iconSvg {
   width: 22px;
   height: 22px;
@@ -248,7 +230,7 @@
   background: rgba(251, 209, 96, 0.12);
   border: 1px solid rgba(251, 209, 96, 0.18);
   color: #fbd160;
-  font-size: 0; /* prevents svg baseline spacing */
+  font-size: 0;
 }
 
 .tileBody {
@@ -294,7 +276,7 @@
   font-family: "Roboto Flex", system-ui, sans-serif;
 }
 
-/* ===== Mobile Inline Form (NO rubber) ===== */
+/* ===== Mobile Inline Form ===== */
 .inlineFormWrap {
   overflow: hidden;
   will-change: height;
@@ -306,12 +288,11 @@
   border: 1px solid rgba(251, 209, 96, 0.12);
   background: rgba(7, 7, 7, 0.22);
   padding: 10px;
-
   transform: translateZ(0);
   backface-visibility: hidden;
 }
 
-/* ===== Right Panel (desktop) ===== */
+/* ===== Right Panel ===== */
 .rightSizer {
   width: 100%;
 }
@@ -348,7 +329,7 @@
   box-shadow: 0 0 0 3px rgba(251, 209, 96, 0.12);
 }
 
-/* ===== Drawer Form (used on desktop right + mobile inline) ===== */
+/* ===== Drawer Form ===== */
 .drawer {
   border-radius: 16px;
   border: 1px solid rgba(251, 209, 96, 0.12);
@@ -393,7 +374,6 @@
   font-weight: 800;
 }
 
-/* "X" close */
 .closeX {
   width: 36px;
   height: 36px;
@@ -415,7 +395,6 @@
   border-color: rgba(251, 209, 96, 0.28);
 }
 
-/* Form grid */
 .formGrid {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -521,7 +500,6 @@
   }
 }
 
-/* Submit */
 .submit {
   display: inline-flex;
   align-items: center;
@@ -551,7 +529,6 @@
   box-shadow: none;
 }
 
-/* Status messages */
 .success,
 .error {
   margin: 0;
@@ -574,7 +551,6 @@
   color: rgba(255, 220, 220, 0.95);
 }
 
-/* Animations */
 @keyframes neonPulse {
   0%,
   100% {
@@ -590,5 +566,3 @@
 :global(html) {
   scrollbar-gutter: stable;
 }
-
-

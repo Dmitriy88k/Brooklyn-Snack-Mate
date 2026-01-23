@@ -1,7 +1,39 @@
-import { motion } from "framer-motion";
+"use client";
+
+import { motion, useReducedMotion } from "framer-motion";
+import { useEffect, useState } from "react";
 import styles from "./about.module.css";
+import { Link } from "react-router-dom";
+
+/* Detect mobile BEFORE first render */
+function isMobileNow() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 700px)").matches;
+}
 
 export default function AboutPage() {
+  const reduceMotion = useReducedMotion();
+
+  // Critical: initialize correctly so desktop is NOT treated as mobile
+  const [isMobile, setIsMobile] = useState(isMobileNow);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 700px)");
+    const handler = () => setIsMobile(mq.matches);
+
+    handler();
+
+    if (mq.addEventListener) mq.addEventListener("change", handler);
+    else mq.addListener(handler);
+
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", handler);
+      else mq.removeListener(handler);
+    };
+  }, []);
+
+  const disableMotion = reduceMotion || isMobile;
+
   return (
     <main className={styles.page}>
       <section className={styles.shell}>
@@ -9,39 +41,52 @@ export default function AboutPage() {
           <h1 className={styles.title}>About Us</h1>
         </header>
 
+        {/* CARD — animated ONLY on desktop */}
         <motion.section
           className={styles.card}
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{
-            duration: 0.75,
-            ease: [0.22, 1, 0.36, 1], // smooth "easeOutExpo-ish"
-          }}
+          initial={
+            disableMotion
+              ? false
+              : { opacity: 0, y: 24 }
+          }
+          animate={
+            disableMotion
+              ? false
+              : { opacity: 1, y: 0 }
+          }
+          transition={
+            disableMotion
+              ? { duration: 0 }
+              : {
+                  duration: 0.75,
+                  ease: [0.22, 1, 0.36, 1], // your original easing
+                }
+          }
         >
           {/* ABOUT */}
           <section className={styles.section}>
             <p className={styles.paragraph}>
               We believe vending should be more than simply placing a machine.
               Every location is approached individually, with close attention to
-              the people who use it. From machine placement to product
-              selection, we take a hands-on approach to ensure each setup fits
-              the space and the customers it serves.
+              the people who use it. From machine placement to product selection,
+              we take a hands-on approach to ensure each setup fits the space and
+              the customers it serves.
             </p>
 
             <p className={styles.paragraph}>
-              We work closely with our clients to choose products that make
-              sense for their location and audience. Each machine includes a
-              simple online feedback option, allowing users to share suggestions
-              or service needs at any time. We don’t restock on autopilot — we
-              review feedback, monitor usage, and make thoughtful adjustments to
-              keep service consistent and relevant.
+              We work closely with our clients to choose products that make sense
+              for their location and audience. Each machine includes a simple
+              online feedback option, allowing users to share suggestions or
+              service needs at any time. We don’t restock on autopilot — we review
+              feedback, monitor usage, and make thoughtful adjustments to keep
+              service consistent and relevant.
             </p>
 
             <p className={styles.paragraph}>
               As a business owner or property manager, you don’t need to worry
               about restocking, cleaning, maintenance, or insurance. We handle
-              every aspect of the service at no cost to you, keeping each
-              machine clean, stocked, and fully operational. Our goal is to be a
+              every aspect of the service at no cost to you, keeping each machine
+              clean, stocked, and fully operational. Our goal is to be a
               dependable, straightforward partner you can rely on.
             </p>
           </section>
@@ -61,23 +106,20 @@ export default function AboutPage() {
                   </h3>
                 </div>
                 <p className={styles.stepText}>
-                  We start by reviewing your location to understand foot
-                  traffic, available space, and electrical access. This helps
-                  determine whether a vending setup makes sense and where a
-                  machine would work best.
+                  We start by reviewing your location to understand foot traffic,
+                  available space, and electrical access.
                 </p>
               </li>
 
               <li className={styles.step}>
                 <div className={styles.stepHeader}>
                   <span className={styles.stepNumber}>2</span>
-                  <h3 className={styles.stepTitle}>Placement Recommendation</h3>
+                  <h3 className={styles.stepTitle}>
+                    Placement Recommendation
+                  </h3>
                 </div>
                 <p className={styles.stepText}>
-                  Based on the layout and usage of the space, we recommend a
-                  specific placement that is visible, accessible, and practical
-                  for daily use. Placement is agreed on before any installation
-                  takes place.
+                  We recommend a visible, accessible, and practical placement.
                 </p>
               </li>
 
@@ -87,10 +129,7 @@ export default function AboutPage() {
                   <h3 className={styles.stepTitle}>Product Selection</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We work with you to select an initial mix of snacks and
-                  beverages that fits the location and the people using it.
-                  Product selection can be adjusted over time based on usage and
-                  feedback.
+                  We select snacks and drinks based on your audience.
                 </p>
               </li>
 
@@ -100,8 +139,7 @@ export default function AboutPage() {
                   <h3 className={styles.stepTitle}>Installation</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We deliver, install, and stock the machine. Once installed,
-                  the machine is fully operational and ready for use.
+                  We deliver, install, and stock the machine.
                 </p>
               </li>
 
@@ -111,9 +149,7 @@ export default function AboutPage() {
                   <h3 className={styles.stepTitle}>Ongoing Service</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We handle restocking, cleaning, routine maintenance, repairs,
-                  and insurance. You do not need to manage or coordinate any of
-                  these items.
+                  We handle restocking, cleaning, maintenance, and insurance.
                 </p>
               </li>
 
@@ -125,9 +161,7 @@ export default function AboutPage() {
                   </h3>
                 </div>
                 <p className={styles.stepText}>
-                  Each machine includes an online feedback option. We review
-                  feedback and usage and make adjustments to product selection
-                  or service as needed to keep the machine running smoothly.
+                  We adjust products and service based on usage and feedback.
                 </p>
               </li>
             </ol>
@@ -146,9 +180,10 @@ export default function AboutPage() {
               </p>
             </div>
 
-            <a className={styles.contactButton} href="/contact">
+            <Link to="/contact" className={styles.contactButton}>
               Contact Us
-            </a>
+            </Link>
+
           </section>
         </motion.section>
       </section>

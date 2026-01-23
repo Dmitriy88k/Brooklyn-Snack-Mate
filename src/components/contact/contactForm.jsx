@@ -1,23 +1,35 @@
-import { useState, useEffect } from "react";
-import { motion } from "framer-motion";
+"use client";
+
+import { useEffect, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
 import styles from "./contactForm.module.css";
 
+function isMobileNow() {
+  if (typeof window === "undefined") return false;
+  return window.matchMedia("(max-width: 700px)").matches;
+}
+
 export default function ContactForm() {
-  const [status, setStatus] = useState("idle"); // "idle" | "sending" | "sent" | "error"
-  const [isDesktop, setIsDesktop] = useState(false);
+  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
+  const reduceMotion = useReducedMotion();
 
-  // Detect desktop vs mobile (matches your 1200px breakpoint)
+  // IMPORTANT: detect mobile BEFORE first paint
+  const [isMobile, setIsMobile] = useState(isMobileNow);
+
   useEffect(() => {
-    const check = () => {
-      if (typeof window !== "undefined") {
-        setIsDesktop(window.innerWidth >= 1200);
-      }
-    };
+    const mq = window.matchMedia("(max-width: 700px)");
+    const handler = () => setIsMobile(mq.matches);
 
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
+    if (mq.addEventListener) mq.addEventListener("change", handler);
+    else mq.addListener(handler);
+
+    return () => {
+      if (mq.removeEventListener) mq.removeEventListener("change", handler);
+      else mq.removeListener(handler);
+    };
   }, []);
+
+  const disableMotion = reduceMotion || isMobile;
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -27,18 +39,13 @@ export default function ContactForm() {
       const form = e.currentTarget;
       const data = new FormData(form);
 
-      data.append(
-        "_subject",
-        "New Vending Placement Inquiry (Brooklyn SnackMate)"
-      );
+      data.append("_subject", "New Vending Placement Inquiry (Brooklyn SnackMate)");
       data.append("_format", "plain");
 
       const res = await fetch("https://formspree.io/f/xaqndryw", {
         method: "POST",
         body: data,
-        headers: {
-          Accept: "application/json",
-        },
+        headers: { Accept: "application/json" },
       });
 
       if (res.ok) {
@@ -66,34 +73,29 @@ export default function ContactForm() {
   return (
     <main className={styles.page}>
       <section className={styles.shell}>
-        {/* TITLE: smooth drop from top on all devices */}
+        {/* TITLE */}
         <motion.header
           className={styles.header}
-          initial={{ y: -36, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{
-            type: "spring",
-            stiffness: 65,
-            damping: 18,
-            mass: 1,
-          }}
+          initial={disableMotion ? false : { y: -50, opacity: 0 }}
+          animate={disableMotion ? false : { y: 0, opacity: 1 }}
+          transition={
+            disableMotion ? { duration: 0 } : { duration: 1.1, ease: [0.16, 1, 0.3, 1] }
+          }
         >
           <h1 className={styles.title}>Contact Us</h1>
         </motion.header>
 
         <div className={styles.grid}>
-          {/* LEFT: info card */}
+          {/* LEFT */}
           <motion.aside
             className={styles.infoCard}
-            initial={infoInitial}
-            animate={commonAnimate}
-            transition={{
-              type: "spring",
-              stiffness: 60,
-              damping: 18,
-              mass: 1,
-              delay: 0.18,
-            }}
+            initial={disableMotion ? false : { x: -60, opacity: 0 }}
+            animate={disableMotion ? false : { x: 0, opacity: 1 }}
+            transition={
+              disableMotion
+                ? { duration: 0 }
+                : { duration: 1.25, delay: 0.25, ease: [0.16, 1, 0.3, 1] }
+            }
           >
             <h2 className={styles.cardTitle}>What to include</h2>
             <ul className={styles.list}>
@@ -112,6 +114,7 @@ export default function ContactForm() {
               >
                 Call: +1 (929) 777-6229
               </a>
+
               <a
                 className={`${styles.quickLink} ${styles.emailLink}`}
                 href="mailto:info@brooklynsnackmate.com"
@@ -125,18 +128,16 @@ export default function ContactForm() {
             </div>
           </motion.aside>
 
-          {/* RIGHT: form card */}
+          {/* RIGHT */}
           <motion.section
             className={styles.formCard}
-            initial={formInitial}
-            animate={commonAnimate}
-            transition={{
-              type: "spring",
-              stiffness: 60,
-              damping: 18,
-              mass: 1,
-              delay: 0.26,
-            }}
+            initial={disableMotion ? false : { x: 60, opacity: 0 }}
+            animate={disableMotion ? false : { x: 0, opacity: 1 }}
+            transition={
+              disableMotion
+                ? { duration: 0 }
+                : { duration: 1.25, delay: 0.38, ease: [0.16, 1, 0.3, 1] }
+            }
           >
             <form className={styles.form} onSubmit={onSubmit}>
               <div className={styles.row}>

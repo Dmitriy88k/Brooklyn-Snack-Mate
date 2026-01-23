@@ -41,7 +41,9 @@
 
 
 
-
+/* ========================
+   GRID
+   ======================== */
 .grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -49,12 +51,14 @@
   margin-top: 18px;
 }
 
-/* Cards */
+/* ========================
+   CARDS
+   ======================== */
 .infoCard,
 .formCard {
   position: relative;
   border-radius: 18px;
-  background: rgba(45, 44, 53, 0.72); /* #2d2c35 vibe */
+  background: rgba(45, 44, 53, 0.72);
   border: 1px solid rgba(251, 209, 96, 0.18);
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.45),
@@ -62,7 +66,7 @@
   overflow: hidden;
 }
 
-/* subtle glow like your hero machine */
+/* subtle glow */
 .infoCard::before,
 .formCard::before {
   content: "";
@@ -109,6 +113,9 @@
   margin: 14px 0;
 }
 
+/* ========================
+   QUICK CONTACT
+   ======================== */
 .quick {
   display: grid;
   gap: 10px;
@@ -121,11 +128,8 @@
   letter-spacing: 0.02em;
   font-family: "Roboto Flex", system-ui, sans-serif;
 }
-.quickLink:hover {
-  text-decoration: underline;
-}
 
-/* ========== MOBILE DEFAULT (no underline, no purple) ========== */
+/* No underline / no purple anywhere */
 .quickLink,
 .quickLink:link,
 .quickLink:visited,
@@ -136,9 +140,6 @@
   text-decoration: none !important;
 }
 
-
-
-
 .note {
   margin: 4px 0 0;
   color: rgba(255, 255, 255, 0.72);
@@ -147,12 +148,14 @@
   font-family: "Roboto Flex", system-ui, sans-serif;
 }
 
-/* Form */
+/* ========================
+   FORM
+   ======================== */
 .form {
   display: grid;
   gap: 14px;
   position: relative;
-  z-index: 1; /* above glow */
+  z-index: 1;
 }
 
 .row {
@@ -203,6 +206,9 @@
   min-height: 140px;
 }
 
+/* ========================
+   BUTTON
+   ======================== */
 .button {
   border: none;
   border-radius: 14px;
@@ -223,7 +229,7 @@
 }
 
 .button:active {
-  transform: translateY(0px) scale(0.99);
+  transform: translateY(0) scale(0.99);
 }
 
 .button:disabled {
@@ -245,7 +251,9 @@
   font-family: "Roboto Flex", system-ui, sans-serif;
 }
 
-/* Desktop layout */
+/* ========================
+   DESKTOP LAYOUT
+   ======================== */
 @media (min-width: 1200px) {
   .grid {
     grid-template-columns: 0.92fr 1.08fr;
@@ -262,21 +270,17 @@
     padding: 22px;
   }
 
-  /* DESKTOP: phone link stays plain, no underline, no hover effect */
-.phoneLink {
-  text-decoration: none !important;
-  color: #fbd160 !important;
-}
-.phoneLink:hover {
-  text-decoration: none !important;
-  color: #fbd160 !important;
-}
+  /* Desktop link behavior */
+  .phoneLink,
+  .phoneLink:hover {
+    text-decoration: none !important;
+    color: #fbd160 !important;
+  }
 
-/* DESKTOP: email link gets underline ONLY on hover */
-.emailLink {
-  text-decoration: none !important;
-  color: #fbd160 !important;
-}
+  .emailLink {
+    text-decoration: none !important;
+    color: #fbd160 !important;
+  }
 
 .emailLink:hover {
   text-decoration: underline !important;
@@ -288,4 +292,17 @@
 
 
 
+@keyframes neonPulse {
+  0%,
+  100% {
+    text-shadow:
+      0 0 10px rgba(251, 209, 96, 0.6),
+      0 0 30px rgba(251, 209, 96, 0.35);
+  }
+  50% {
+    text-shadow:
+      0 0 16px rgba(251, 209, 96, 0.85),
+      0 0 48px rgba(251, 209, 96, 0.55);
+  }
+}
 

@@ -1,5 +1,5 @@
-import Feedback from "../components/feedback/feedback.jsx";
+import FeedbackForm from "../components/feedback/feedback.jsx";
 
-export default function Home() {
-  return <Feedback />;
+export default function Feedback() {
+  return <FeedbackForm />;
 }

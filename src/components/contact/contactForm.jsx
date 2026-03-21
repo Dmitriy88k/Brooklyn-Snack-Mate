@@ -13,7 +13,7 @@ export default function ContactForm() {
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
   const reduceMotion = useReducedMotion();
 
-  // IMPORTANT: detect mobile BEFORE first paint
+  // detect mobile before first paint
   const [isMobile, setIsMobile] = useState(isMobileNow);
 
   useEffect(() => {
@@ -59,21 +59,9 @@ export default function ContactForm() {
     }
   }
 
-  // Animation configs
-  const infoInitial = isDesktop
-    ? { x: -32, opacity: 0 }
-    : { y: 24, opacity: 0 };
-
-  const formInitial = isDesktop
-    ? { x: 32, opacity: 0 }
-    : { y: 24, opacity: 0 };
-
-  const commonAnimate = { x: 0, y: 0, opacity: 1 };
-
   return (
     <main className={styles.page}>
       <section className={styles.shell}>
-        {/* TITLE */}
         <motion.header
           className={styles.header}
           initial={disableMotion ? false : { y: -50, opacity: 0 }}
@@ -86,7 +74,6 @@ export default function ContactForm() {
         </motion.header>
 
         <div className={styles.grid}>
-          {/* LEFT */}
           <motion.aside
             className={styles.infoCard}
             initial={disableMotion ? false : { x: -60, opacity: 0 }}
@@ -128,7 +115,6 @@ export default function ContactForm() {
             </div>
           </motion.aside>
 
-          {/* RIGHT */}
           <motion.section
             className={styles.formCard}
             initial={disableMotion ? false : { x: 60, opacity: 0 }}

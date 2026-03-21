@@ -1,5 +1,5 @@
-import About from "../components/about/about.jsx";
+import AboutComponent from "../components/about/about.jsx";
 
-export default function Contact() {
-  return <About />;
+export default function About() {
+  return <AboutComponent />;
 }

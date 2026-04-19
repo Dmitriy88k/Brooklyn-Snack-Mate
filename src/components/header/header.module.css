@@ -254,6 +254,7 @@ letter-spacing: 0.06em;
     margin-right: 1px;
     font-size: 0.8rem;
     letter-spacing: .1rem;
+    border-radius: 10px;
 
     /* tighter horizontal padding */
     padding: 8px 12px;

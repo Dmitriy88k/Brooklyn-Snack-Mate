@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import styles from "./about.module.css";
 import { Link } from "react-router-dom";
 
-/* Detect mobile BEFORE first render */
 function isMobileNow() {
   if (typeof window === "undefined") return false;
   return window.matchMedia("(max-width: 700px)").matches;
@@ -13,8 +12,6 @@ function isMobileNow() {
 
 export default function AboutPage() {
   const reduceMotion = useReducedMotion();
-
-  // Critical: initialize correctly so desktop is NOT treated as mobile
   const [isMobile, setIsMobile] = useState(isMobileNow);
 
   useEffect(() => {
@@ -38,62 +35,55 @@ export default function AboutPage() {
     <main className={styles.page}>
       <section className={styles.shell}>
         <header className={styles.header}>
-          <h1 className={styles.title}>About Us</h1>
+          <div className={styles.headerHero}>
+            <p className={styles.eyebrow}>Brooklyn Snack Mate</p>
+            <h1 className={styles.title}>About Us</h1>
+            <p className={styles.subtitle}>
+              We provide full-service vending for offices, medical spaces,
+              laundromats, and other high-traffic locations — with reliable
+              support and a product mix tailored to the people who use it.
+            </p>
+          </div>
         </header>
 
-        {/* CARD — animated ONLY on desktop */}
         <motion.section
           className={styles.card}
-          initial={
-            disableMotion
-              ? false
-              : { opacity: 0, y: 24 }
-          }
-          animate={
-            disableMotion
-              ? false
-              : { opacity: 1, y: 0 }
-          }
+          initial={disableMotion ? false : { opacity: 0, y: 24 }}
+          animate={disableMotion ? false : { opacity: 1, y: 0 }}
           transition={
             disableMotion
               ? { duration: 0 }
-              : {
-                  duration: 0.75,
-                  ease: [0.22, 1, 0.36, 1], // your original easing
-                }
+              : { duration: 0.75, ease: [0.22, 1, 0.36, 1] }
           }
         >
-          {/* ABOUT */}
           <section className={styles.section}>
+            <h2 className={styles.sectionTitle}>What makes our service different</h2>
+
             <p className={styles.paragraph}>
               We believe vending should be more than simply placing a machine.
               Every location is approached individually, with close attention to
               the people who use it. From machine placement to product selection,
-              we take a hands-on approach to ensure each setup fits the space and
-              the customers it serves.
+              we take a hands-on approach to make sure each setup fits the space
+              and the customers it serves.
             </p>
 
             <p className={styles.paragraph}>
               We work closely with our clients to choose products that make sense
-              for their location and audience. Each machine includes a simple
-              online feedback option, allowing users to share suggestions or
-              service needs at any time. We don’t restock on autopilot — we review
-              feedback, monitor usage, and make thoughtful adjustments to keep
-              service consistent and relevant.
+              for their location and audience. We don’t restock on autopilot —
+              we review usage, listen to feedback, and make thoughtful
+              adjustments to keep service consistent and relevant.
             </p>
 
             <p className={styles.paragraph}>
               As a business owner or property manager, you don’t need to worry
-              about restocking, cleaning, maintenance, or insurance. We handle
-              every aspect of the service at no cost to you, keeping each machine
-              clean, stocked, and fully operational. Our goal is to be a
-              dependable, straightforward partner you can rely on.
+              about restocking, cleaning, maintenance, or day-to-day service.
+              We handle every aspect of the operation so the machine stays
+              stocked, clean, and dependable.
             </p>
           </section>
 
           <div className={styles.divider} />
 
-          {/* HOW IT WORKS */}
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>How It Works</h2>
 
@@ -101,25 +91,22 @@ export default function AboutPage() {
               <li className={styles.step}>
                 <div className={styles.stepHeader}>
                   <span className={styles.stepNumber}>1</span>
-                  <h3 className={styles.stepTitle}>
-                    Initial Review of the Space
-                  </h3>
+                  <h3 className={styles.stepTitle}>Initial Review</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We start by reviewing your location to understand foot traffic,
-                  available space, and electrical access.
+                  We review your location to understand foot traffic, available
+                  space, and the type of setup that makes the most sense.
                 </p>
               </li>
 
               <li className={styles.step}>
                 <div className={styles.stepHeader}>
                   <span className={styles.stepNumber}>2</span>
-                  <h3 className={styles.stepTitle}>
-                    Placement Recommendation
-                  </h3>
+                  <h3 className={styles.stepTitle}>Placement Recommendation</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We recommend a visible, accessible, and practical placement.
+                  We recommend a practical, visible location for the machine so
+                  it is easy to access and makes sense for your space.
                 </p>
               </li>
 
@@ -129,7 +116,8 @@ export default function AboutPage() {
                   <h3 className={styles.stepTitle}>Product Selection</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We select snacks and drinks based on your audience.
+                  We choose snacks and drinks based on your audience and the kind
+                  of traffic your location gets.
                 </p>
               </li>
 
@@ -139,7 +127,8 @@ export default function AboutPage() {
                   <h3 className={styles.stepTitle}>Installation</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We deliver, install, and stock the machine.
+                  We deliver, install, and prepare the machine so it is ready to
+                  use without creating extra work for your team.
                 </p>
               </li>
 
@@ -149,19 +138,19 @@ export default function AboutPage() {
                   <h3 className={styles.stepTitle}>Ongoing Service</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We handle restocking, cleaning, maintenance, and insurance.
+                  We handle restocking, cleaning, and service support to keep the
+                  machine operating properly.
                 </p>
               </li>
 
               <li className={styles.step}>
                 <div className={styles.stepHeader}>
                   <span className={styles.stepNumber}>6</span>
-                  <h3 className={styles.stepTitle}>
-                    Monitoring and Adjustments
-                  </h3>
+                  <h3 className={styles.stepTitle}>Adjustments Over Time</h3>
                 </div>
                 <p className={styles.stepText}>
-                  We adjust products and service based on usage and feedback.
+                  We monitor what works, refine the product mix, and make
+                  improvements as your location’s needs evolve.
                 </p>
               </li>
             </ol>
@@ -169,21 +158,20 @@ export default function AboutPage() {
 
           <div className={styles.divider} />
 
-          {/* CTA */}
           <section className={styles.ctaWrap}>
             <div className={styles.ctaText}>
               <p className={styles.ctaLead}>
-                Considering vending for your location?
+                Thinking about vending for your location?
               </p>
               <p className={styles.ctaSub}>
-                Get in touch and we’ll walk you through how it works.
+                Tell us about your space and we’ll help you figure out the right
+                machine and setup.
               </p>
             </div>
 
-            <Link to="/contact" className={styles.contactButton}>
-              Contact Us
+            <Link to="/get-a-machine" className={styles.contactButton}>
+              Get a Machine
             </Link>
-
           </section>
         </motion.section>
       </section>

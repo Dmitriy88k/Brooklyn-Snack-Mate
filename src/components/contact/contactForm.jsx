@@ -9,12 +9,30 @@ function isMobileNow() {
   return window.matchMedia("(max-width: 700px)").matches;
 }
 
-export default function ContactForm() {
-  const [status, setStatus] = useState("idle"); // idle | sending | sent | error
-  const reduceMotion = useReducedMotion();
+const MACHINE_OPTIONS = [
+  {
+    label: "Combo",
+    value: "Snacks & Drinks (Combo)",
+  },
+  {
+    label: "Drinks Only",
+    value: "Drinks only",
+  },
+  {
+    label: "Snacks Only",
+    value: "Snacks only",
+  },
+  {
+    label: "Laundromat",
+    value: "Laundromat machine",
+  },
+];
 
-  // detect mobile before first paint
+export default function ContactForm() {
+  const [status, setStatus] = useState("idle");
+  const reduceMotion = useReducedMotion();
   const [isMobile, setIsMobile] = useState(isMobileNow);
+  const [selectedMachineType, setSelectedMachineType] = useState("Not sure");
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 700px)");
@@ -39,7 +57,7 @@ export default function ContactForm() {
       const form = e.currentTarget;
       const data = new FormData(form);
 
-      data.append("_subject", "New Vending Placement Inquiry (Brooklyn SnackMate)");
+      data.append("_subject", "New Vending Placement Inquiry (Brooklyn Snack Mate)");
       data.append("_format", "plain");
 
       const res = await fetch("https://formspree.io/f/xaqndryw", {
@@ -51,10 +69,11 @@ export default function ContactForm() {
       if (res.ok) {
         setStatus("sent");
         form.reset();
+        setSelectedMachineType("Not sure");
       } else {
         setStatus("error");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
     }
   }
@@ -64,33 +83,59 @@ export default function ContactForm() {
       <section className={styles.shell}>
         <motion.header
           className={styles.header}
-          initial={disableMotion ? false : { y: -50, opacity: 0 }}
+          initial={disableMotion ? false : { y: -40, opacity: 0 }}
           animate={disableMotion ? false : { y: 0, opacity: 1 }}
           transition={
-            disableMotion ? { duration: 0 } : { duration: 1.1, ease: [0.16, 1, 0.3, 1] }
+            disableMotion
+              ? { duration: 0 }
+              : { duration: 0.9, ease: [0.16, 1, 0.3, 1] }
           }
         >
-          <h1 className={styles.title}>Contact Us</h1>
+          <p className={styles.eyebrow}>Brooklyn Snack Mate</p>
+          <h1 className={styles.title}>Get a Vending Machine</h1>
         </motion.header>
 
         <div className={styles.grid}>
           <motion.aside
             className={styles.infoCard}
-            initial={disableMotion ? false : { x: -60, opacity: 0 }}
+            initial={disableMotion ? false : { x: -40, opacity: 0 }}
             animate={disableMotion ? false : { x: 0, opacity: 1 }}
             transition={
               disableMotion
                 ? { duration: 0 }
-                : { duration: 1.25, delay: 0.25, ease: [0.16, 1, 0.3, 1] }
+                : { duration: 1, delay: 0.12, ease: [0.16, 1, 0.3, 1] }
             }
           >
-            <h2 className={styles.cardTitle}>What to include</h2>
+            <h2 className={styles.cardTitle}>What we provide</h2>
             <ul className={styles.list}>
-              <li>Business name & address</li>
-              <li>Type of location (office, hotel, clinic, etc.)</li>
-              <li>Approx. daily foot traffic (if known)</li>
-              <li>Best contact person + phone</li>
+              <li>Machine installation</li>
+              <li>Regular restocking</li>
+              <li>Maintenance and support</li>
+              <li>Customized product selection</li>
             </ul>
+
+            <div className={styles.divider} />
+
+            <h2 className={styles.cardTitle}>Machine options</h2>
+            <div className={styles.machineTypes}>
+              {MACHINE_OPTIONS.map((option) => {
+                const isSelected = selectedMachineType === option.value;
+
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    className={`${styles.machineOption} ${
+                      isSelected ? styles.machineOptionActive : ""
+                    }`}
+                    onClick={() => setSelectedMachineType(option.value)}
+                    aria-pressed={isSelected}
+                  >
+                    {option.label}
+                  </button>
+                );
+              })}
+            </div>
 
             <div className={styles.divider} />
 
@@ -110,25 +155,25 @@ export default function ContactForm() {
               </a>
 
               <p className={styles.note}>
-                No spam. We only use your info to respond to this request.
+                We only use your information to respond to this inquiry.
               </p>
             </div>
           </motion.aside>
 
           <motion.section
             className={styles.formCard}
-            initial={disableMotion ? false : { x: 60, opacity: 0 }}
+            initial={disableMotion ? false : { x: 40, opacity: 0 }}
             animate={disableMotion ? false : { x: 0, opacity: 1 }}
             transition={
               disableMotion
                 ? { duration: 0 }
-                : { duration: 1.25, delay: 0.38, ease: [0.16, 1, 0.3, 1] }
+                : { duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }
             }
           >
             <form className={styles.form} onSubmit={onSubmit}>
               <div className={styles.row}>
                 <label className={styles.label}>
-                  Name
+                  Contact name
                   <input
                     className={styles.input}
                     name="name"
@@ -164,6 +209,18 @@ export default function ContactForm() {
                 </label>
 
                 <label className={styles.label}>
+                  Business name
+                  <input
+                    className={styles.input}
+                    name="businessName"
+                    placeholder="Company / clinic / laundromat"
+                    required
+                  />
+                </label>
+              </div>
+
+              <div className={styles.row}>
+                <label className={styles.label}>
                   Location type
                   <select
                     className={styles.input}
@@ -175,32 +232,39 @@ export default function ContactForm() {
                       Select one
                     </option>
                     <option>Office</option>
-                    <option>Clinic</option>
+                    <option>Medical Office / Clinic</option>
                     <option>Laundromat</option>
                     <option>Warehouse</option>
                     <option>Hotel</option>
+                    <option>Retail / Customer Space</option>
                     <option>Other</option>
                   </select>
                 </label>
-              </div>
 
-              <label className={styles.label}>
-                Address (optional)
-                <input
-                  className={styles.input}
-                  name="address"
-                  autoComplete="street-address"
-                  placeholder="Street, City, State, Zip."
-                />
-              </label>
+                <label className={styles.label}>
+                  Machine type
+                  <select
+                    className={styles.input}
+                    name="machineType"
+                    value={selectedMachineType}
+                    onChange={(e) => setSelectedMachineType(e.target.value)}
+                  >
+                    <option>Not sure</option>
+                    <option>Snacks & Drinks (Combo)</option>
+                    <option>Drinks only</option>
+                    <option>Snacks only</option>
+                    <option>Laundromat machine</option>
+                  </select>
+                </label>
+              </div>
 
               <label className={styles.label}>
                 Message
                 <textarea
                   className={styles.textarea}
                   name="message"
-                  placeholder="We’d love to learn more about your location — please share a few details such as the type of machine you’re interested in and the number of employees or guests."
-                  rows={6}
+                  placeholder="Tell us about your location, traffic, and what kind of machine you need."
+                  rows={4}
                   required
                 />
               </label>
@@ -210,12 +274,12 @@ export default function ContactForm() {
                 type="submit"
                 disabled={status === "sending"}
               >
-                {status === "sending" ? "Sending…" : "Send message"}
+                {status === "sending" ? "Sending…" : "Request Machine"}
               </button>
 
               {status === "sent" && (
                 <p className={styles.success}>
-                  ✅ Message sent. We’ll get back to you shortly.
+                  ✅ Inquiry sent. We’ll get back to you shortly.
                 </p>
               )}
 

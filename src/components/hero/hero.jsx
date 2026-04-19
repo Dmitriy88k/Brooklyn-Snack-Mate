@@ -1,20 +1,35 @@
 import styles from "./hero.module.css";
 import { motion } from "framer-motion";
-import Machine from "../../assets/Smart_Vending_Machine_2.png"
+import { Link } from "react-router-dom";
+import Machine from "../../assets/Smart_Vending_Machine_2.png";
+
+const fadeUp = {
+  initial: { y: 26, opacity: 0 },
+  animate: { y: 0, opacity: 1 },
+};
 
 export default function Hero() {
   return (
     <section className={styles.hero}>
       <div className={styles.heroInner}>
         <div className={styles.content}>
+          <motion.p
+            className={styles.eyebrow}
+            initial={{ y: -18, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+          >
+            Office • Medical Office • Laundromat Vending Service
+          </motion.p>
+
           <motion.h1
             className={styles.title}
-            initial={{ y: -44, opacity: 0 }}
+            initial={{ y: -40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{
               type: "spring",
-              stiffness: 65, // lower = slower
-              damping: 18, // higher = less bounce
+              stiffness: 62,
+              damping: 18,
               mass: 1.1,
             }}
           >
@@ -27,45 +42,81 @@ export default function Hero() {
 
           <motion.p
             className={styles.subtitle}
-            initial={{ y: -22, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
+            {...fadeUp}
             transition={{
-              duration: 1.1,
-              delay: 0.18,
+              duration: 0.95,
+              delay: 0.16,
               ease: [0.12, 0.95, 0.2, 1],
             }}
           >
-            Better than traditional vending. Easier than managing it yourself.
+            We install, stock, and maintain modern vending machines for offices,
+            medical locations, and high-traffic businesses.
           </motion.p>
 
           <motion.p
             className={styles.support}
-            initial={{ y: -18, opacity: 0 }}
-            animate={{ y: 0, opacity: 0.9 }}
+            {...fadeUp}
             transition={{
-              duration: 1.05,
-              delay: 0.32,
+              duration: 1,
+              delay: 0.28,
               ease: [0.12, 0.95, 0.2, 1],
             }}
           >
-            From installation to restocking and maintenance, our local team
-            handles everything — with brand-new machines and consistent service
-            across Brooklyn and NYC.
+            Brand-new machines, dependable local service, and snack and drink
+            selections tailored to your location — without adding extra work to
+            your team.
           </motion.p>
+
+          <motion.div
+            className={styles.ctaRow}
+            {...fadeUp}
+            transition={{
+              duration: 0.95,
+              delay: 0.4,
+              ease: [0.12, 0.95, 0.2, 1],
+            }}
+          >
+            <Link to="/get-a-machine" className={styles.primaryBtn}>
+              Get a Machine
+            </Link>
+
+            <Link to="/products" className={styles.secondaryBtn}>
+              View Products
+            </Link>
+          </motion.div>
+
+          <motion.ul
+            className={styles.highlights}
+            {...fadeUp}
+            transition={{
+              duration: 0.95,
+              delay: 0.5,
+              ease: [0.12, 0.95, 0.2, 1],
+            }}
+          >
+            <li>No day-to-day management for your staff</li>
+            <li>Restocking and maintenance handled for you</li>
+            <li>Modern machines and curated product selection</li>
+          </motion.ul>
         </div>
-    <motion.div
-      className={styles.machineWrap}
-      initial={{ y: 40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{
-        duration: 1.3,
-        delay: 0.55,
-        ease: [0.16, 1, 0.3, 1],
-      }}
-    >
-      <img src={Machine} alt="Smart vending machine" />
-    </motion.div>
-    </div>
+
+        <motion.div
+          className={styles.machineWrap}
+          initial={{ y: 40, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{
+            duration: 1.3,
+            delay: 0.55,
+            ease: [0.16, 1, 0.3, 1],
+          }}
+        >
+          <img
+            src={Machine}
+            alt="Smart vending machine"
+            className={styles.machineImage}
+          />
+        </motion.div>
+      </div>
     </section>
   );
 }

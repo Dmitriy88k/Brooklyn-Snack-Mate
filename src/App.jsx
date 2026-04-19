@@ -3,7 +3,6 @@ import Header from "./components/header/header.jsx";
 import Home from "./pages/Home.jsx";
 import Contact from "./pages/Contact.jsx";
 import About from "./pages/About.jsx"
-import Feedback from "./pages/Feedback.jsx"
 import Products from './pages/Products.jsx'
 
 export default function App() {
@@ -14,9 +13,8 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/products" element={<Products />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/about" element={<About />}/>
-        <Route path="/feedback" element={<Feedback/>}/>
+        <Route path="/get-a-machine" element={<Contact />} />
+        <Route path="/about-us" element={<About />}/>
       </Routes>
     </div>
   );

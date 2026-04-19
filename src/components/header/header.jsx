@@ -32,24 +32,23 @@ export default function Header() {
 
           {/*<Link to="/survey">Machines</Link> */} 
           <Link to="/products">Products</Link> 
-          <Link to="/feedback">Feedback</Link> 
-          <Link to="/about" >About Us</Link>
+          <Link to="/about-us" >About Us</Link>
           {/* <Link >FAQs</Link> */}
         </nav>
 
-        <Link to="/contact" className={styles.contactButton}>
-          <span className={styles.btnText}>Contact Us</span>
+        <Link to="/get-a-machine" className={styles.contactButton}>
+          <span className={styles.btnText}>Get a Machine</span>
         </Link>
       </div>
 
       {/* ✅ Mobile hamburger */}
       <div className={styles.mobileRight}>
         <Link
-          to="/contact"
+          to="/get-a-machine"
           className={styles.contactButton}
           onClick={() => setOpen(false)}
         >
-          <span className={styles.btnText}>Contact Us
+          <span className={styles.btnText}>Get a Machine
 
           </span>
         </Link>
@@ -116,17 +115,9 @@ export default function Header() {
                 Products
               </Link>
 
-              <Link 
-                className={styles.menuItem} 
-                to="/feedback"
-                onClick={() => setOpen(false)}
-              >
-                Feedback
-              </Link> 
-
               <Link
                 className={styles.menuItem}
-                to="/about"
+                to="/about-us"
                 onClick={() => setOpen(false)}
               >
                 About Us

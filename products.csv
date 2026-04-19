@@ -1,5 +1,25 @@
 name,category,imagePath,sortOrder
-Vitamin Water,Sports Drinks,5_Vitamin_Water_Red.png,150
-Vitamin Water,Sports Drinks,6_Vitamin_Water_Yellow.png,160
-Vitamin Water,Sports Drinks,6_Vitamin_Water_Yellow.png,170
-Vitamin Water,Sports Drinks,6_Vitamin_Water_Yellow.png,180
+Snickers,Sweets,8_Snickers_Chocolate_Bar.png,680
+Twix,Sweets,9_Twix_Caramel_Cookie_Chocolate.png,690
+Kit Kat,Sweets,6_KitKat_Chocolate.png,700
+M&M's Peanut Chocolate,Sweets,11_M_M_Peanut_Chocolate.png,710
+M&M's Milk Chocolate,Sweets,10_M_M_Milk_Chocolate.png,720
+Sour Patch,Sweets,15_Sour_Patch_Kids.png,730
+Skittles,Sweets,13_Skittles_Original.png,740
+Hershey's Chocolate,Sweets,Hersheys.png,750
+Milka Chocolate,Sweets,Milka.png,760
+Haribo,Sweets,Haribo.png,770
+Milky_way,Sweets,Milky_way.png,780
+Welch's Mixed Fruit,Sweets,Welchs.png,790
+Oreo Minis,Sweets,24_Oreo_minis.png,800
+Mini Starburst,Sweets,25_Starburst.png,810
+Pocky Chocolate Sticks,Sweets,12_Pocky_Chocolate_Biscuit_Sticks.png,820
+Kind Nut Bars,Sweets,21_Kind_Bars.png,830
+Chips Ahoy Cookies,Sweets,1_Chips_Ahoy.png,840
+Nutella Breadsticks,Sweets,17_Nutella_Breadsticks.png,850
+Croissant Vanilla,Sweets,22_7_days_Vanilla.png,860
+Croissant Strawberry,Sweets,23_7_days_Strawberry.png,870
+Croissant Chocolate,Sweets,27_7_days_chocolate.png,880
+Tastykake Mini Muffins,Sweets,26_Mini_Muffins.png,890
+Pop-Tarts Bites,Sweets,26_Pop_Tarts_Bites.png,900
+Rice Krispies Treats,Sweets,Rice_crispies.png,910

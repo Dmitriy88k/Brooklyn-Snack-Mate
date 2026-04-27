@@ -39,6 +39,15 @@
 
 .logo { width:92px; }
 
+.logoLink:focus,
+.logoLink:active {
+  outline: none;
+}
+
+.logoLink:focus-visible {
+  outline: none;
+}
+
 /* Mobile hamburger */
 .iconButton {
   width: 48px;

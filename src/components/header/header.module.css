@@ -64,6 +64,14 @@
   outline: none;
   background: transparent;
   -webkit-tap-highlight-color: transparent;
+  transition:
+    transform 180ms ease,
+    filter 180ms ease;
+}
+
+.logoLink:active .logo {
+  transform: scale(0.92) rotate(-2deg);
+  filter: drop-shadow(0 0 14px rgba(251, 209, 96, 0.5));
 }
 
 .logo:focus,

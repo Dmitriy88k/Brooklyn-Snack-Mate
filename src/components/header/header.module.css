@@ -296,18 +296,23 @@ letter-spacing: 0.06em;
     /* reduce left/right spacing */
     margin-left: 8px;
     margin-right: 1px;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     letter-spacing: .1rem;
-    border-radius: 10px;
-
+    border-radius: 4px;
     /* tighter horizontal padding */
-    padding: 8px 12px;
+    padding: 4px 18px 4px 10px; /* still expands left, just less */
     min-width: 96px;
+    font-family:Arial, Helvetica, sans-serif;
   }
 
   .contactButton:hover {
-    padding: 8px 28px 8px 10px; /* still expands left, just less */
+    padding: 4px 28px 4px 10px; /* still expands left, just less */
   }
+
+  .btnText {
+  padding-left: 12px;
+  color: rgb(0, 0, 0);
+}
 
   .contactButton:hover .btnText {
     transform: translateX(-10px);

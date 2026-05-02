@@ -143,8 +143,13 @@
 }
 
 .filterBtnActive {
-  background: var(--accent);
-  color: #fff;
+  background: #2d2c35;              /* same dark as header */
+  color: #f3c969;                /* goldish */
+  border: 1px solid rgba(216, 177, 90, 0.35);
+
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.18),
+    inset 0 0 6px rgba(216, 177, 90, 0.15);
 }
 
 .messageBox {
@@ -214,22 +219,118 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(12px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
 }
 
 .scrollTopBtnVisible {
   opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 @media (max-width: 560px) {
+  .page {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 8.5rem;
+  }
+
   .headerHero {
-    padding: 18px;
+    padding: 16px;
+    border-radius: 18px;
   }
 
   .title {
-    font-size: 3rem;
+    font-size: 2.35rem;
+  }
+
+  .subtitle {
+    font-size: 11px;
+    margin-top: 16px;
+  }
+
+  .toolbar {
+    padding: 14px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+  }
+
+  .toolbarTop {
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .toolbarTitle {
+    font-size: 0.95rem;
+  }
+
+  .resultCount {
+    font-size: 12px;
+    white-space: nowrap;
+  }
+
+  .filters {
+    gap: 8px;
+  }
+
+  .filterBtn {
+    padding: 8px 12px;
+    font-size: 11px;
   }
 
   .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    border-radius: 16px;
+    box-shadow: 0 8px 18px rgba(45, 44, 53, 0.08);
+  }
+
+  .card:hover {
+    transform: none;
+  }
+
+  .imageWrap {
+    height: 150px;
+    padding: 14px;
+    background: linear-gradient(180deg, #fbf8f2, #f1ebe1);
+  }
+
+  .image {
+    max-width: 92%;
+    max-height: 92%;
+  }
+
+  .cardBody {
+    padding: 15px 8px 12px 8px;   /* ↓ reduced top/bottom */
+    min-height: auto;       /* ❌ remove forced height */
+    display: block;         /* ❌ remove flex centering */
+
+  }
+
+.productName {
+  margin: 0;
+  font-family: "Inter", "SF Pro Display", system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  color: #2d2c35;
+  text-align: center
+}
+
+  .scrollTopBtn {
+    width: 54px;
+    height: 54px;
+    right: 14px;
+    bottom: 18px;
   }
 }

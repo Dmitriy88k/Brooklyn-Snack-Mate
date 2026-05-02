@@ -52,9 +52,18 @@ export default function ProductsList() {
     return "Other";
   };
 
-  const loadProducts = async ({ initial = false } = {}) => {
+  const productMatchesCategory = (product, category) => {
+    if (category === "All") return true;
+    return getMainCategory(product) === category;
+  };
+
+  const loadProducts = async ({
+    initial = false,
+    category = activeCategory,
+    cursor = lastDoc,
+  } = {}) => {
     if (isFetchingRef.current) return;
-    if (!initial && !hasMore) return;
+    if (!initial && !cursor) return;
 
     isFetchingRef.current = true;
 
@@ -69,50 +78,72 @@ export default function ProductsList() {
     try {
       const productsRef = collection(db, "products");
 
-      let q;
+      let collectedItems = [];
+      let currentCursor = cursor;
+      let newLastDoc = cursor;
+      let moreAvailable = true;
 
-      if (initial) {
-        q = query(productsRef, orderBy("sortOrder", "asc"), limit(PAGE_SIZE));
-      } else {
-        if (!lastDoc) return;
+      while (collectedItems.length < PAGE_SIZE && moreAvailable) {
+        const q = currentCursor
+          ? query(
+              productsRef,
+              orderBy("sortOrder", "asc"),
+              startAfter(currentCursor),
+              limit(PAGE_SIZE)
+            )
+          : query(productsRef, orderBy("sortOrder", "asc"), limit(PAGE_SIZE));
 
-        q = query(
-          productsRef,
-          orderBy("sortOrder", "asc"),
-          startAfter(lastDoc),
-          limit(PAGE_SIZE)
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          moreAvailable = false;
+          break;
+        }
+
+        newLastDoc = snapshot.docs[snapshot.docs.length - 1];
+        currentCursor = newLastDoc;
+
+        const batchItems = await Promise.all(
+          snapshot.docs.map(async (doc) => {
+            const data = doc.data();
+            let imageUrl = "";
+
+            if (data.imagePath) {
+              try {
+                const storageRef = ref(storage, `products/${data.imagePath}`);
+                imageUrl = await getDownloadURL(storageRef);
+              } catch (imgError) {
+                console.error(
+                  `Failed to load image for ${data.name}:`,
+                  imgError
+                );
+              }
+            }
+
+            return {
+              id: doc.id,
+              ...data,
+              imageUrl,
+            };
+          })
         );
+
+        const matchingItems = batchItems.filter((item) =>
+          productMatchesCategory(item, category)
+        );
+
+        collectedItems = [...collectedItems, ...matchingItems];
+
+        if (snapshot.docs.length < PAGE_SIZE) {
+          moreAvailable = false;
+        }
       }
 
-      const snapshot = await getDocs(q);
+      const visibleItems = collectedItems.slice(0, PAGE_SIZE);
 
-      const items = await Promise.all(
-        snapshot.docs.map(async (doc) => {
-          const data = doc.data();
-          let imageUrl = "";
-
-          if (data.imagePath) {
-            try {
-              const storageRef = ref(storage, `products/${data.imagePath}`);
-              imageUrl = await getDownloadURL(storageRef);
-            } catch (imgError) {
-              console.error(`Failed to load image for ${data.name}:`, imgError);
-            }
-          }
-
-          return {
-            id: doc.id,
-            ...data,
-            imageUrl,
-          };
-        })
-      );
-
-      const newLastDoc = snapshot.docs[snapshot.docs.length - 1] || null;
-
-      setProducts((prev) => (initial ? items : [...prev, ...items]));
+      setProducts((prev) => (initial ? visibleItems : [...prev, ...visibleItems]));
       setLastDoc(newLastDoc);
-      setHasMore(snapshot.docs.length === PAGE_SIZE);
+      setHasMore(moreAvailable);
     } catch (err) {
       console.error("Failed to load products:", err);
       setError("Unable to load products right now.");
@@ -124,8 +155,17 @@ export default function ProductsList() {
   };
 
   useEffect(() => {
-    loadProducts({ initial: true });
-  }, []);
+    setProducts([]);
+    setLastDoc(null);
+    setHasMore(true);
+    setShowScrollTop(false);
+
+    loadProducts({
+      initial: true,
+      category: activeCategory,
+      cursor: null,
+    });
+  }, [activeCategory]);
 
   useEffect(() => {
     if (loading) return;
@@ -142,7 +182,11 @@ export default function ProductsList() {
         const firstEntry = entries[0];
 
         if (firstEntry.isIntersecting && !isFetchingRef.current) {
-          loadProducts({ initial: false });
+          loadProducts({
+            initial: false,
+            category: activeCategory,
+            cursor: lastDoc,
+          });
         }
       },
       {
@@ -159,22 +203,14 @@ export default function ProductsList() {
         loadObserverRef.current.disconnect();
       }
     };
-  }, [loading, loadingMore, hasMore, lastDoc, products.length]);
-
-  const filteredProducts = useMemo(() => {
-    if (activeCategory === "All") return products;
-
-    return products.filter(
-      (item) => getMainCategory(item) === activeCategory
-    );
-  }, [products, activeCategory]);
+  }, [loading, loadingMore, hasMore, lastDoc, products.length, activeCategory]);
 
   useEffect(() => {
     if (thresholdObserverRef.current) {
       thresholdObserverRef.current.disconnect();
     }
 
-    if (filteredProducts.length <= 30) {
+    if (products.length <= 30) {
       setShowScrollTop(false);
       return;
     }
@@ -208,7 +244,7 @@ export default function ProductsList() {
         thresholdObserverRef.current.disconnect();
       }
     };
-  }, [filteredProducts, activeCategory]);
+  }, [products, activeCategory]);
 
   const scrollToTop = () => {
     window.scrollTo({
@@ -236,8 +272,7 @@ export default function ProductsList() {
             <div className={styles.toolbarTop}>
               <h2 className={styles.toolbarTitle}>Browse by category</h2>
               <p className={styles.resultCount}>
-                {filteredProducts.length} product
-                {filteredProducts.length !== 1 ? "s" : ""}
+                {products.length} product{products.length !== 1 ? "s" : ""}
               </p>
             </div>
 
@@ -266,14 +301,14 @@ export default function ProductsList() {
           </p>
         )}
 
-        {!loading && !error && filteredProducts.length === 0 && (
+        {!loading && !error && products.length === 0 && (
           <p className={styles.messageBox}>No products found yet.</p>
         )}
 
-        {!loading && !error && filteredProducts.length > 0 && (
+        {!loading && !error && products.length > 0 && (
           <>
             <section className={styles.grid}>
-              {filteredProducts.map((product, index) => (
+              {products.map((product, index) => (
                 <article
                   key={product.id}
                   ref={

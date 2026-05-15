@@ -40,6 +40,23 @@ export default function Hero() {
             <span className={styles.rely}>Rely On</span>
           </motion.h1>
 
+          <motion.div
+            className={styles.mobileMachineWrap}
+            initial={{ y: 24, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{
+              duration: 1,
+              delay: 0.2,
+              ease: [0.16, 1, 0.3, 1],
+            }}
+          >
+            <img
+              src={Machine}
+              alt="Smart vending machine"
+              className={styles.mobileMachineImage}
+            />
+          </motion.div>
+
           <motion.p
             className={styles.subtitle}
             {...fadeUp}
@@ -63,8 +80,8 @@ export default function Hero() {
             }}
           >
             Brand-new machines, dependable local service, and snack and drink
-            selections tailored to your location — without adding extra work to
-            your team.
+            selections tailored to your location — while we handle everything
+            for you.
           </motion.p>
 
           <motion.div
@@ -94,9 +111,11 @@ export default function Hero() {
               ease: [0.12, 0.95, 0.2, 1],
             }}
           >
-            <li>No day-to-day management for your staff</li>
+            <li>Fully managed vending service</li>
             <li>Restocking and maintenance handled for you</li>
-            <li>Modern machines and curated product selection</li>
+            <li>
+              Modern vending machines with products tailored to your location
+            </li>
           </motion.ul>
         </div>
 

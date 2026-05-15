@@ -263,21 +263,103 @@
 
 /* MOBILE */
 @media (max-width: 700px) {
+  .page {
+    padding-top: 8.5rem;
+    padding-left: 12px;
+    padding-right: 12px;
+    padding-bottom: 48px;
+  }
+
+  .header {
+    margin-bottom: 18px;
+  }
+
+  .headerHero {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
   .card {
-    padding: 16px;
+    padding: 18px 14px;
+    border-radius: 18px;
+  }
+
+  .section {
+    gap: 16px;
+  }
+
+  .sectionTitle {
+    line-height: 1.25;
+    margin-bottom: 2px;
+  }
+
+  .paragraph {
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .divider {
+    margin: 26px 0;
+  }
+
+  .steps {
+    gap: 14px;
+  }
+
+  .step {
+    padding: 15px 13px 14px;
+    border-radius: 15px;
+  }
+
+  .stepHeader {
+    gap: 9px;
+    margin-bottom: 9px;
+  }
+
+  .stepTitle {
+    line-height: 1.25;
+  }
+
+  .stepText {
+    font-size: 13.5px;
+    line-height: 1.65;
   }
 
   .ctaWrap {
-    padding: 16px;
+    padding: 18px 14px;
+    gap: 16px;
+    border-radius: 16px;
+  }
+
+  .ctaText {
+    gap: 8px;
   }
 
   .ctaLead {
     font-size: 17px;
+    line-height: 1.3;
+  }
+
+  .ctaSub {
+    font-size: 13.5px;
+    line-height: 1.65;
   }
 
   .contactButton {
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-self: center;
+
+    width: 80%;
+    max-width: 280px;
     min-width: 0;
+
+    margin: 2px auto 0;
+    padding: 11px 0;
+
+    font-size: 12px;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
   }
 
   .page * {
@@ -287,16 +369,51 @@
 }
 
 @media (max-width: 560px) {
+  .header {
+    margin-bottom: 18px;
+  }
+
+  .page {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
   .headerHero {
-    padding: 18px;
+    padding: 26px 14px;   /* same as About */
+    border-radius: 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
   }
 
   .title {
-    font-size: 3.4rem;
+    font-size: 3rem;
+    line-height: 1.1;
   }
 
   .subtitle {
+    margin-top: 18px;
     font-size: 12px;
-    line-height: 1.75;
+    line-height: 1.7;
+    max-width: 58ch;
+  }
+
+  .card {
+    padding: 26px 12px;
+  }
+
+  .step {
+    padding: 14px 12px;
+  }
+
+  .ctaWrap {
+    padding: 16px 12px;
+  }
+
+  .contactButton {
+    width: 82%;
+    max-width: 270px;
   }
 }

@@ -91,7 +91,7 @@ export default function Hero() {
             }}
           >
             <Link to="/get-a-machine" className={styles.primaryBtn}>
-              Get a Machine
+              Get a Free Machine
             </Link>
 
             <Link to="/products" className={styles.secondaryBtn}>

@@ -15,60 +15,60 @@ import laundry from "../../assets/laundry-machine.png";
 
 const MACHINE_IMAGES = [
   {
-    name: "Futura Combo Machine",
+    name: "Snack & Drink Combo Machine",
     type: "Snacks & Drinks",
     category: "Combo",
     image: comboFutura,
-    bestFor: "Offices, schools, clinics",
+    dimensions: '74.5"H x 34.7"W x 31.2"D',
   },
   {
-    name: "AI Smart Machine",
+    name: "AI Smart Vending Machine",
     type: "Smart Vending",
     category: "Combo",
     image: haha,
-    bestFor: "Premium locations",
+    dimensions: '76.6"H x 27.2"W x 27.1"D',
   },
   {
-    name: "Snacks Machine",
+    name: "Snack & Candy Vending Machine",
     type: "Snacks Only",
     category: "Snacks",
     image: snacksMachine,
-    bestFor: "Break rooms & warehouses",
+    dimensions: '72.1"H x 35.2"W x 34.8"D',
   },
   {
-    name: "Mini Drinks Machine",
+    name: "Mini Beverage Vending Machine",
     type: "Mini Beverage",
     category: "Drinks",
     image: drinksMini,
-    bestFor: "Small offices",
+    dimensions: '72.1"H x 29.5"W x 38.1"D',
   },
   {
-    name: "Large Drinks Machine",
+    name: "Large Drinks Vending Machine",
     type: "Large Beverage",
     category: "Drinks",
     image: largeBeverage,
-    bestFor: "High-traffic areas",
+    dimensions: '72.1"H x 41.1"W x 38.1"D',
   },
   {
-    name: "Outdoor Combo Machine",
+    name: "Outdoor Combo Vending Machine",
     type: "Outdoor Combo",
     category: "Combo",
     image: outdoor,
-    bestFor: "Outdoor spaces",
+    dimensions: '72.1"H x 45.1"W x 40.1"D',
   },
   {
-    name: "Large Combo Machine",
+    name: "Premium Full-Size Combo Machine",
     type: "Large Combo",
     category: "Combo",
     image: largeCombo,
-    bestFor: "Busy locations",
+    dimensions: '72.1"H x 41.1"W x 38.1"D',
   },
   {
-    name: "Laundry Machine",
+    name: "Laundry Supply Vending Machine",
     type: "Laundry Essentials",
     category: "Laundry",
     image: laundry,
-    bestFor: "Laundromats & buildings",
+    dimensions: '72.1"H x 29.5"W x 34.1"D',
   },
 ];
 
@@ -443,7 +443,7 @@ export default function ContactForm() {
                 <p>{selectedMachine.category}</p>
                 <h3>{selectedMachine.name}</h3>
                 <span>{selectedMachine.type}</span>
-                <small>Best for: {selectedMachine.bestFor}</small>
+                <small>Machine Dimensions: {selectedMachine.dimensions}</small>
               </div>
 
               <div className={styles.modalThumbs}>

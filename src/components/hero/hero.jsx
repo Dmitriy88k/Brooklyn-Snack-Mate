@@ -66,8 +66,7 @@ export default function Hero() {
               ease: [0.12, 0.95, 0.2, 1],
             }}
           >
-            We install, stock, and maintain modern vending machines for offices,
-            medical locations, and high-traffic businesses.
+            Free Vending Machines for Offices and Businesses in Brooklyn and NYC
           </motion.p>
 
           <motion.p
@@ -79,9 +78,7 @@ export default function Hero() {
               ease: [0.12, 0.95, 0.2, 1],
             }}
           >
-            Brand-new machines, dependable local service, and snack and drink
-            selections tailored to your location — while we handle everything
-            for you.
+            We install, stock, clean and maintain the machine. Your employees, customers and visitors get convenient snacks and drinks — and you don't have to do any extra work.
           </motion.p>
 
           <motion.div
@@ -111,10 +108,10 @@ export default function Hero() {
               ease: [0.12, 0.95, 0.2, 1],
             }}
           >
-            <li>Fully managed vending service</li>
-            <li>Restocking and maintenance handled for you</li>
+            <li>Free installation</li>
+            <li>We handle all stocking and maintenance</li>
             <li>
-              Modern vending machines with products tailored to your location
+              Snacks and drinks selected for your location
             </li>
           </motion.ul>
         </div>

@@ -128,6 +128,32 @@
   white-space: nowrap;
 }
 
+/* IMPORTANT: removes blue/white browser focus */
+.preview,
+.machineOption,
+.modalThumb,
+.closeButton {
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.preview:focus,
+.preview:focus-visible,
+.preview:active,
+.machineOption:focus,
+.machineOption:focus-visible,
+.machineOption:active,
+.modalThumb:focus,
+.modalThumb:focus-visible,
+.modalThumb:active,
+.closeButton:focus,
+.closeButton:focus-visible,
+.closeButton:active {
+  outline: none;
+}
+
 .preview {
   width: 100%;
   min-height: 220px;
@@ -140,6 +166,26 @@
     linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(0, 0, 0, 0.24));
   cursor: zoom-in;
   overflow: hidden;
+  transition:
+    border-color 0.22s ease,
+    box-shadow 0.22s ease,
+    transform 0.18s ease;
+}
+
+.preview:hover {
+  border-color: rgba(251, 209, 96, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(251, 209, 96, 0.14),
+    0 0 18px rgba(251, 209, 96, 0.1);
+}
+
+.preview:focus,
+.preview:focus-visible,
+.preview:active {
+  border-color: rgba(251, 209, 96, 0.72);
+  box-shadow:
+    0 0 0 1px rgba(251, 209, 96, 0.14),
+    0 0 18px rgba(251, 209, 96, 0.1);
 }
 
 .preview img {
@@ -193,21 +239,42 @@
   background: rgba(255, 255, 255, 0.055);
   cursor: pointer;
   text-align: center;
+  box-shadow: none;
   transition:
-    transform 160ms ease,
-    border-color 160ms ease,
-    background 160ms ease;
+    transform 0.18s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
 .machineOption:hover {
   transform: translateY(-2px);
-  border-color: rgba(251, 209, 96, 0.5);
+  border-color: rgba(251, 209, 96, 0.75);
+  background: rgba(251, 209, 96, 0.055);
+  box-shadow:
+    0 0 0 1px rgba(251, 209, 96, 0.12),
+    0 8px 18px rgba(0, 0, 0, 0.28);
 }
 
-.machineOptionActive {
+.machineOption:focus,
+.machineOption:focus-visible,
+.machineOption:active {
+  border-color: rgba(251, 209, 96, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(251, 209, 96, 0.12),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.machineOptionActive,
+.machineOptionActive:hover,
+.machineOptionActive:focus,
+.machineOptionActive:focus-visible,
+.machineOptionActive:active {
   border-color: rgba(251, 209, 96, 0.95);
   background: rgba(251, 209, 96, 0.12);
-  box-shadow: 0 0 0 1px rgba(251, 209, 96, 0.22) inset;
+  box-shadow:
+    inset 0 0 0 1px rgba(251, 209, 96, 0.22),
+    0 0 14px rgba(251, 209, 96, 0.12);
 }
 
 .machineOption img {
@@ -404,18 +471,37 @@
 
 .closeButton {
   position: absolute;
-  top: 14px;
-  right: 14px;
-  z-index: 2;
+  top: 18px;
+  right: 18px;
+  z-index: 5;
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(251, 209, 96, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
   border-radius: 999px;
-  color: #fbd160;
-  background: rgba(0, 0, 0, 0.45);
+  background: transparent;
+  color: #f5c440;
   cursor: pointer;
-  font-size: 28px;
+  font-size: 36px;
   line-height: 1;
+  box-shadow: none;
+  transition:
+    transform 0.18s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.18s ease,
+    background 0.18s ease;
+}
+
+.closeButton:hover {
+  transform: translateY(-2px) scale(1.1);
+
+}
+
+.closeButton:active {
+  transform: translateY(0) scale(0.92);
+  background: transparent;
+  box-shadow: none;
 }
 
 .modalImageWrap {
@@ -485,11 +571,42 @@
   border-radius: 14px;
   background: rgba(255, 255, 255, 0.06);
   cursor: pointer;
+  box-shadow: none;
+  transition:
+    transform 0.18s ease,
+    border-color 0.22s ease,
+    background 0.22s ease,
+    box-shadow 0.22s ease;
 }
 
-.modalThumbActive {
+.modalThumb:hover {
+  transform: translateY(1px);
+  border-color: rgba(251, 209, 96, 0.75);
+  background: rgba(251, 209, 96, 0.055);
+  box-shadow:
+    0 0 0 1px rgba(251, 209, 96, 0.12),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.modalThumb:focus,
+.modalThumb:focus-visible,
+.modalThumb:active {
+  border-color: rgba(251, 209, 96, 0.75);
+  box-shadow:
+    0 0 0 1px rgba(251, 209, 96, 0.12),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.modalThumbActive,
+.modalThumbActive:hover,
+.modalThumbActive:focus,
+.modalThumbActive:focus-visible,
+.modalThumbActive:active {
   border-color: rgba(251, 209, 96, 0.95);
   background: rgba(251, 209, 96, 0.12);
+  box-shadow:
+    inset 0 0 0 1px rgba(251, 209, 96, 0.22),
+    0 0 14px rgba(251, 209, 96, 0.12);
 }
 
 .modalThumb img {

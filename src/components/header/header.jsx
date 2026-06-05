@@ -33,7 +33,7 @@ export default function Header() {
           {/*<Link to="/survey">Machines</Link> */} 
           <Link to="/products">Products</Link> 
           <Link to="/about-us" >About Us</Link>
-          {/* <Link >FAQs</Link> */}
+          <Link to="/faq">FAQs</Link> 
         </nav>
 
         <Link to="/get-a-machine" className={styles.contactButton}>
@@ -98,14 +98,6 @@ export default function Header() {
                 ease: "easeInOut",
               }}
             >
-              {/*<Link 
-                className={styles.menuItem} 
-                to="/"
-                onClick={() => setOpen(false)}
-              >
-                Machines
-              </Link> 
-              */}
 
               <Link 
                 className={styles.menuItem} 
@@ -123,13 +115,13 @@ export default function Header() {
                 About Us
               </Link>
               
-              {/* <Link
+              <Link
                 className={styles.menuItem}
                 to="/contact"
                 onClick={() => setOpen(false)}
               >
                 FAQs
-              </Link> */}
+              </Link>
               
               
             </motion.div>
